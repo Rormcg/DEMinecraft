@@ -1,2 +1,2 @@
 # Working-Project-DE-Discrete-Structures
-May change or make this more stylized, but the current idea is to create a project that program that emulates an ecosystem of sorts, with different objects interacting with one another.
+Creating a 3D game with java. The goal is to be able to display and navigate through a 3D environment, and potentially add interactivity.
