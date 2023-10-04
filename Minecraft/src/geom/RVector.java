@@ -4,6 +4,7 @@ Rory McGuire
 RVector
 Represents a 2D Vector
 */
+package geom;
 
 import java.awt.geom.Point2D;
 

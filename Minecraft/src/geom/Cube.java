@@ -1,6 +1,4 @@
-
-import java.awt.Graphics;
-import java.awt.Color;
+package geom;
 
 public class Cube extends Rect3D {
    

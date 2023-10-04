@@ -1,13 +1,14 @@
 /**
  * Represents a face of a Shape3D
  */
+package geom;
 
 import java.awt.Graphics;
 import java.awt.Color;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
-public class Face implements Comparable {
+public class Face implements Comparable<Face> {
 	private RVector3D[] points;
 	private Color color;
 	
@@ -46,15 +47,12 @@ public class Face implements Comparable {
 	 * this is greater than the other Face if this has the greater 'Z' value for its average Z value
 	 * Essentially, compares which Face is the most "forward"/"closer to the screen" in order to 
 	 * know which Face to draw first
-	 * @param o Face to be compared against this
-	 * @return negative if this is less than o, zero if the two are equal, positive if this is 
-	 * greater than o
-	 * @throws ClassCastException if o is not an instance of Face
+	 * @param f Face to be compared against this
+	 * @return negative if this is less than f, zero if the two are equal, positive if this is 
+	 * greater than f
 	 */
 	@Override
-	public int compareTo(Object o) {
-		if(!(o instanceof Face)) throw new ClassCastException("Incompatible Types");
-		Face f = (Face) o;
+	public int compareTo(Face f) {
 		
 		//if this 'mid Z' = f 'mid Z', then return 0, otherwise return the difference between the two
 		return (Math.abs(calcMidZ(this) - calcMidZ(f)) > 0.0001) ? (int)(calcMidZ(this) - calcMidZ(f)) : 0;
