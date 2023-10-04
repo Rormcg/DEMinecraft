@@ -1,5 +1,6 @@
 
 import java.awt.Graphics;
+import java.util.Arrays;
 import java.awt.Color;
 
 public class Rect3D extends Shape3D{
@@ -36,6 +37,20 @@ public class Rect3D extends Shape3D{
       {5, 7}};
       super.setLines(lines);
       super.setPoints(nodes);
+      
+      Face[] f = {
+      new Face(nodes[0], nodes[1], nodes[3], nodes[2]),
+      new Face(nodes[0], nodes[1], nodes[5], nodes[4]),
+      new Face(nodes[4], nodes[6], nodes[7], nodes[5]),
+      new Face(nodes[1], nodes[5], nodes[7], nodes[3]),
+      new Face(nodes[2], nodes[6], nodes[7], nodes[3]),
+      new Face(nodes[0], nodes[4], nodes[6], nodes[2])};
+      
+      for(int i = 0; i < f.length; i++) {
+    	  f[i].setColor(new Color((int)(Math.random() * 255 + 1), (int)(Math.random() * 255 + 1), (int)(Math.random() * 255 + 1)));
+      }
+      
+      super.setFaces(f);
    }
    
    Rect3D(RVector3D pos, double w, double h, double d) {
@@ -44,11 +59,17 @@ public class Rect3D extends Shape3D{
    
    @Override
    public void draw(Graphics g) {
+      /*
       RVector3D[] h = super.getPoints();
       
       for(int i = 0; i < getLines().length; i++) {
          g.drawLine((int)getPoints()[getLines()[i][0]].getX(), (int)getPoints()[getLines()[i][0]].getY(),
                     (int)getPoints()[getLines()[i][1]].getX(), (int)getPoints()[getLines()[i][1]].getY());
+      }
+      */
+      Arrays.sort(getFaces()); //get the proper order for drawing each face (from the farthest back to the closest)
+      for(int i = 0; i < getFaces().length; i++) {
+    	  getFaces()[i].draw(g);
       }
    }
    

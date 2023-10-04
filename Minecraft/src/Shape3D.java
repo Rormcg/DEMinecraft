@@ -4,6 +4,7 @@ import java.awt.Graphics;
 public abstract class Shape3D {
    private RVector3D[] points;
    private int[][] lines;
+   private Face[] faces;
    
    Shape3D() {
       points = null;
@@ -30,6 +31,14 @@ public abstract class Shape3D {
    
    public int[][] getLines() {
       return lines;
+   }
+   
+   public Face[] getFaces() {
+	   return faces;
+   }
+   
+   public void setFaces(Face[] f) {
+	   faces = f;
    }
    
    public void rotate(double x, double y, double z) {
