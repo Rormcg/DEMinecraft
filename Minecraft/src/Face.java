@@ -43,17 +43,23 @@ public class Face implements Comparable {
 	
 	/**
 	 * Compares this to another Face
-	 * this is greater than the other Face if this has the greatest 'Z' value among its points
-	 * If both have the same greatest 'Z' value, check which has the next greatest 'Z' value, etc.
+	 * this is greater than the other Face if this has the greater 'Z' value for its average Z value
+	 * Essentially, compares which Face is the most "forward"/"closer to the screen" in order to 
+	 * know which Face to draw first
 	 * @param o Face to be compared against this
 	 * @return negative if this is less than o, zero if the two are equal, positive if this is 
 	 * greater than o
+	 * @throws ClassCastException if o is not an instance of Face
 	 */
 	@Override
 	public int compareTo(Object o) {
 		if(!(o instanceof Face)) throw new ClassCastException("Incompatible Types");
 		Face f = (Face) o;
 		
+		//if this 'mid Z' = f 'mid Z', then return 0, otherwise return the difference between the two
+		return (Math.abs(calcMidZ(this) - calcMidZ(f)) > 0.0001) ? (int)(calcMidZ(this) - calcMidZ(f)) : 0;
+		
+		/*
 		ArrayList<Double> a = new ArrayList<Double>(); //list of indices of previously used greatest points in this.points
 		ArrayList<Double> b = new ArrayList<Double>(); //list of indices of previously used greatest points in f.points
 		for(int i = 0; i < points.length && i < f.points.length; i++) {
@@ -79,6 +85,18 @@ public class Face implements Comparable {
 		}
 		
 		return 0;
+		*/
+	}
+	
+	//Returns the Z of the middle of the Face f
+	private double calcMidZ(Face f) {
+		int z = 0;
+		
+		for(int i = 0; i < f.points.length; i++) {
+			z += f.points[i].getZ();
+		}
+		
+		return z / f.points.length;
 	}
 	
 	public void setColor(Color c) {
