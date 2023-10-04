@@ -1,2 +1,2 @@
-# Working-Project-DE-Discrete-Structures
-Creating a 3D game with java. The goal is to be able to display and navigate through a 3D environment, and potentially add interactivity.
+# DEMineCraft
+Creating a clone of Minecraft in Java. The end goal is to have a functioning and interactable world similar to that of Minecraft
