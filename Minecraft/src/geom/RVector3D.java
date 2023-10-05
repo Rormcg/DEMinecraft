@@ -6,8 +6,6 @@ Represents a 3D Vector
 */
 package geom;
 
-import java.awt.geom.Point2D;
-
 public class RVector3D implements Comparable<RVector3D>{ 
    private double x, y, z;
    
