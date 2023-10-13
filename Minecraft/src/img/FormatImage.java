@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 public class FormatImage {
 	
 	
-	//Mut be a convex quadrilateral
+	//Must be a convex quadrilateral
 	public static BufferedImage format(Image i, RVector[] points) {
 		if(points.length != 4) throw new IllegalArgumentException("RVector[] points must be length of 4");
 		
@@ -79,11 +79,19 @@ public class FormatImage {
 		//For empty pixels, use Color.TRANSLUCENT
 		for(int r = 0; r < (int)(endY - startY); r ++) {
 			for(int c = 0; c < (int)(endX - startX); c ++) {
-				
+				//check for (r, c) is in the quad; use inequalities
+				if(r - points[1].getY() <= points[1].slope(points[2]) * (c - points[1].getX()) &&
+				r - points[0].getY() >= points[0].slope(points[1]) * (c - points[0].getX()) &&
+				r - points[1].getY() >= points[1].slope(points[0]) * (c - points[1].getX()) &&
+				r - points[2].getY() <= points[2].slope(points[3]) * (c - points[2].getX())) {
+					
+					
+					//newPixels[r][c] = pixels[][];
+				}
 			}
 		}
 		
-		BufferedImage img2 = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), BufferedImage.TYPE_INT_RGB);
 		
 		for(int r = 0; r < img2.getHeight(); r++) {
 			for(int c = 0; c < img2.getWidth(); c++) {

@@ -28,6 +28,16 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
       return Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
    }
    
+   //returns the slope of the line containing this and another RVector
+   public double slope(RVector other) {
+	   return (getY() - other.getY()) / (getX() - other.getX());
+   }
+   
+   //returns the slope of the line containing two RVectors
+   public static double slope(RVector a, RVector b) {
+	   return (a.getY() - b.getY()) / (a.getX() - b.getX());
+   }
+   
    //Returns the distance between two points (RVectors)
    public static double distance(RVector v1, RVector v2) {
       return Math.sqrt(Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2));
