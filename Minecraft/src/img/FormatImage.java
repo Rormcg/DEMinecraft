@@ -16,24 +16,16 @@ public class FormatImage {
 		//												 3   2
 		
 		RVector[] temp = new RVector[points.length]; //reordered version of points
-		double greatestY1 = -Double.MAX_VALUE;
-		double greatestY2 = -Double.MAX_VALUE;
+		temp[0] = points[0];
+		temp[1] = points[1];
+		
+		//put the two smallest y-values at temp[0] and temp[1] and the two greatest at temp[2] and temp[3]
 		for(int j = 0; j < points.length; j++) {
-			if(points[j].getY() >= greatestY2) {
-				if(points[j].getY() > greatestY1) {
-					greatestY2 = greatestY1;
-					greatestY1 = points[j].getY();
-					for(int x = 0; x < temp.length - 1; x++) {
-						temp[x+1] = temp[x];
-					}
-					temp[0] = points[j];
-				} else {
-					greatestY2 = points[j].getY();
-					for(int x = 1; x < temp.length - 1; x++) {
-						temp[x+1] = temp[x];
-					}
-					temp[1] = points[j];
+			if(points[j].getY() < temp[1].getY()) {
+				for(int x = 1; x < temp.length - 1; x++) {
+					temp[x+1] = temp[x];
 				}
+				temp[1] = points[j];
 			} else {
 				temp[3] = temp[2];
 				temp[2] = points[j];

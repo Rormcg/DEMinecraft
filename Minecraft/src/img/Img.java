@@ -13,8 +13,8 @@ public enum Img {
 	
 	public BufferedImage img;
 	
-	Img(String filename) {
-		File f = new File(String.format("Minecraft%sresources%s" + filename, File.separator));
+	private Img(String filename) {
+		File f = new File(String.format("Minecraft%sresources%s" + filename, File.separator, File.separator, File.separator));
 		
 		try {
 			img = ImageIO.read(f);
