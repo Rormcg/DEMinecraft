@@ -5,7 +5,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public enum Image {
+public enum Img {
 	
 	DIRT_SIDE("dirtSide.jpeg"),
 	GRASS_SIDE("grassSide.jpg"),
@@ -13,7 +13,7 @@ public enum Image {
 	
 	public BufferedImage img;
 	
-	Image(String filename) {
+	Img(String filename) {
 		File f = new File(String.format("Minecraft%sresources%s" + filename, File.separator));
 		
 		try {

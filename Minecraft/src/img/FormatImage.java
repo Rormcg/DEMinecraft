@@ -8,8 +8,8 @@ import java.awt.image.BufferedImage;
 public class FormatImage {
 	
 	
-	//Must be a convex quadrilateral
-	public static BufferedImage format(Image i, RVector[] points) {
+	//Must be a parallelogram
+	public static BufferedImage format(Img i, RVector[] points) {
 		if(points.length != 4) throw new IllegalArgumentException("RVector[] points must be length of 4");
 		
 		//Order the points so as to follow this pattern: 0   1
@@ -60,42 +60,25 @@ public class FormatImage {
 		double endX = points[1].getX() > points[2].getX() ? points[1].getX() : points[2].getX();
 		
 		BufferedImage img = i.img;
-		int[][] pixels = new int[img.getHeight()][img.getWidth()]; //fill with img's pixels
-		int[][] newPixels = new int[(int)(endY - startY)][(int)(endX - startX)]; //fill with empty pixels
+		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), BufferedImage.TYPE_INT_RGB);
 		
-		for(int r = 0; r < img.getHeight(); r++) {
-			for(int c = 0; c < img.getWidth(); c++) {
-				pixels[r][c] = img.getRGB(r, c);
-			}
-		}
-		
-		for(int r = 0; r < newPixels[0].length; r++) {
-			for(int c = 0; c < newPixels.length; c++) {
-				newPixels[r][c] = Color.TRANSLUCENT;
-			}
-		}
-		
-		//Format pixels array into newPixels
+		//Format img pixels into img2
 		//For empty pixels, use Color.TRANSLUCENT
-		for(int r = 0; r < (int)(endY - startY); r ++) {
-			for(int c = 0; c < (int)(endX - startX); c ++) {
+		//for(int r = 0; r < (int)(endY - startY); r ++) {
+			//for(int c = 0; c < (int)(endX - startX); c ++) {
+		for(int r = 0; r < img2.getHeight(); r ++) {
+			for(int c = 0; c < img2.getWidth(); c ++) {
 				//check for (r, c) is in the quad; use inequalities
 				if(r - points[1].getY() <= points[1].slope(points[2]) * (c - points[1].getX()) &&
 				r - points[0].getY() >= points[0].slope(points[1]) * (c - points[0].getX()) &&
 				r - points[1].getY() >= points[1].slope(points[0]) * (c - points[1].getX()) &&
 				r - points[2].getY() <= points[2].slope(points[3]) * (c - points[2].getX())) {
 					
-					
-					//newPixels[r][c] = pixels[][];
+					int tempR = (int)(RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[3]), r, c, points[0].slope(points[1]), points[0].getX(), points[0].getY())) / RVector.distance(points[0], points[3]) * img.getHeight());
+					int tempC = (int)(RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[1]), r, c, points[0].slope(points[3]), points[0].getX(), points[0].getY())) / RVector.distance(points[0], points[1]) * img.getWidth());
+					img2.setRGB(r, c, img.getRGB(tempR, tempC));
+					//newPixels[r][c] = pixels[tempR][tempC];
 				}
-			}
-		}
-		
-		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), BufferedImage.TYPE_INT_RGB);
-		
-		for(int r = 0; r < img2.getHeight(); r++) {
-			for(int c = 0; c < img2.getWidth(); c++) {
-				img2.setRGB(r, c, pixels[r][c]);
 			}
 		}
 		

@@ -9,8 +9,8 @@ package geom;
 import java.awt.geom.Point2D;
 
 public class RVector extends Point2D.Double implements Comparable<RVector>{ 
-   RVector() {super();}
-   RVector (double x, double y) {super(x, y);}
+   public RVector() {super();}
+   public RVector (double x, double y) {super(x, y);}
    
    //Rotates this vector by the specified degrees
    public void rotate(double deg) {
@@ -41,6 +41,17 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    //Returns the distance between two points (RVectors)
    public static double distance(RVector v1, RVector v2) {
       return Math.sqrt(Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2));
+   }
+   
+   //returns the solution of two linear equations in slope-intercept form as an RVector (AKA the intersection of two lines)
+   public static RVector solutionSlopeIntercept(double m1, double b1, double m2, double b2) {
+	   double tempX = (b1 - b2) / (m1 - m2);
+	   return new RVector(tempX, m1 * tempX + b1);
+   }
+   
+   //returns the solution of two linear equations in point-slope form as an RVector (AKA the intersection of two lines)
+   public static RVector solutionPointSlope(double m1, double y1, double x1, double m2, double y2, double x2) {
+	   return solutionSlopeIntercept(m1, -m1 * x1 + y1, m2, -m2 * x2 + y2);
    }
    
    //Sets this vector's magnitude to the specified length
