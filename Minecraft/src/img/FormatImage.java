@@ -61,14 +61,15 @@ public class FormatImage {
 		for(int r = 0; r < img2.getHeight(); r ++) {
 			for(int c = 0; c < img2.getWidth(); c ++) {
 				//check for (r, c) is in the quad; use inequalities
-				if(r - points[1].getY() <= points[1].slope(points[2]) * (c - points[1].getX()) &&
-				r - points[0].getY() >= points[0].slope(points[1]) * (c - points[0].getX()) &&
-				r - points[1].getY() >= points[1].slope(points[0]) * (c - points[1].getX()) &&
-				r - points[2].getY() <= points[2].slope(points[3]) * (c - points[2].getX())) {
-					
+				if(r + startY - points[1].getY() <= points[1].slope(points[2]) * (c + startX - points[1].getX()) &&
+				r + startY - points[0].getY() >= points[0].slope(points[1]) * (c + startX - points[0].getX()) &&
+				r + startY - points[1].getY() >= points[1].slope(points[0]) * (c + startX - points[1].getX()) &&
+				r + startY - points[2].getY() <= points[2].slope(points[3]) * (c + startX - points[2].getX())) {
+					System.out.println();
 					int tempR = (int)(RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[3]), r, c, points[0].slope(points[1]), points[0].getX(), points[0].getY())) / RVector.distance(points[0], points[3]) * img.getHeight());
 					int tempC = (int)(RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[1]), r, c, points[0].slope(points[3]), points[0].getX(), points[0].getY())) / RVector.distance(points[0], points[1]) * img.getWidth());
 					img2.setRGB(r, c, img.getRGB(tempR, tempC));
+					//System.out.println(img.getRGB(tempR, tempC));
 					//newPixels[r][c] = pixels[tempR][tempC];
 				}
 			}
