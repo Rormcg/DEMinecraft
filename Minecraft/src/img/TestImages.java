@@ -53,12 +53,18 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
    public void paintComponent(Graphics g) {
       //Graphics2D g2 = (Graphics2D) g;
       
-	   RVector points[] = {new RVector(50, 100),
+	   /*RVector points[] = {new RVector(50, 100),
 							new RVector(100, 100),
 							new RVector(50, 150),
-							new RVector(100, 150)};
+							new RVector(100, 150)};*/
+      RVector points[] = {new RVector(50, 100),
+							new RVector(100, 100),
+							new RVector(70, 150),
+							new RVector(120, 150)};
 	   g.drawImage(FormatImage.format(Img.GRASS_SIDE, points), 50, 50, null);
 	   
+      g.setColor(Color.RED);
+      g.drawRect(50, 50, 50, 50);
    }
    
    public void mousePressed(MouseEvent e) {    }

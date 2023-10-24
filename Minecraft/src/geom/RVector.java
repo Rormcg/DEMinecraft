@@ -30,11 +30,19 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    
    //returns the slope of the line containing this and another RVector
    public double slope(RVector other) {
+      //if(getX() - other.getX() == 0) {
+        // return getY() - other.getY() >= 0 ? Double.MAX_VALUE : -Double.MAX_VALUE;
+      //}
+
 	   return (getY() - other.getY()) / (getX() - other.getX());
    }
    
    //returns the slope of the line containing two RVectors
    public static double slope(RVector a, RVector b) {
+      //if(a.getX() - b.getX() == 0) {
+        // return a.getY() - b.getY() >= 0 ? Double.MAX_VALUE : -Double.MAX_VALUE;
+      //}
+      
 	   return (a.getY() - b.getY()) / (a.getX() - b.getX());
    }
    
@@ -45,12 +53,43 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    
    //returns the solution of two linear equations in slope-intercept form as an RVector (AKA the intersection of two lines)
    public static RVector solutionSlopeIntercept(double m1, double b1, double m2, double b2) {
-	   double tempX = (b1 - b2) / (m1 - m2);
+	   if(Math.abs(m1 - m2) <= 0.0000001) {
+         return null; //if the two lines are parallel (don't intersect)
+      }
+      
+      //If one/both of the lines have an undefined slope
+      if(m1 == java.lang.Double.POSITIVE_INFINITY || m1 == java.lang.Double.NEGATIVE_INFINITY) {
+         if(m2 == java.lang.Double.POSITIVE_INFINITY || m2 == java.lang.Double.NEGATIVE_INFINITY) {
+            return null;
+         } else {
+            return new RVector(b1, m2*b1 + b2);
+         }
+         //return null;
+      } else if(m2 == java.lang.Double.POSITIVE_INFINITY || m2 == java.lang.Double.NEGATIVE_INFINITY) {
+         return new RVector(b2, m1*b2 + b1);
+      }
+
+      double tempX = (b1 - b2) / (m1 - m2);
 	   return new RVector(tempX, m1 * tempX + b1);
    }
    
    //returns the solution of two linear equations in point-slope form as an RVector (AKA the intersection of two lines)
-   public static RVector solutionPointSlope(double m1, double y1, double x1, double m2, double y2, double x2) {
+   public static RVector solutionPointSlope(double m1, double x1, double y1, double m2, double x2, double y2) {
+      if(Math.abs(m1 - m2) <= 0.0000001) {
+         return null; //if the two lines are parallel (they don't intersect)
+      }
+      
+      //If one/both of the lines have an undefined slope
+      if(m1 == java.lang.Double.POSITIVE_INFINITY || m1 == java.lang.Double.NEGATIVE_INFINITY) {
+         if(m2 == java.lang.Double.POSITIVE_INFINITY || m2 == java.lang.Double.NEGATIVE_INFINITY) {
+            return null;
+         } else {
+            return new RVector(x1, m2*x1 + (-m2 * x2 + y2));
+         }
+         //return null;
+      } else if(m2 == java.lang.Double.POSITIVE_INFINITY || m2 == java.lang.Double.NEGATIVE_INFINITY) {
+         return new RVector(x2, m1*x2 + (-m1 * x1 + y1));
+      }
 	   return solutionSlopeIntercept(m1, -m1 * x1 + y1, m2, -m2 * x2 + y2);
    }
    

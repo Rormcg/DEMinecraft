@@ -18,7 +18,6 @@ public class FormatImage {
 		RVector[] temp = new RVector[points.length]; //reordered version of points
 		temp[0] = points[0];
 		temp[1] = points[1];
-		
 		//put the two smallest y-values at temp[0] and temp[1] and the two greatest at temp[2] and temp[3]
 		for(int j = 0; j < points.length; j++) {
 			if(points[j].getY() < temp[1].getY()) {
@@ -31,7 +30,7 @@ public class FormatImage {
 				temp[2] = points[j];
 			}
 		}
-		
+
 		if(temp[0].getX() > temp[1].getX()) {
 			RVector h = temp[0];
 			temp[0] = temp[1];
@@ -65,12 +64,23 @@ public class FormatImage {
 				r + startY - points[0].getY() >= points[0].slope(points[1]) * (c + startX - points[0].getX()) &&
 				r + startY - points[1].getY() >= points[1].slope(points[0]) * (c + startX - points[1].getX()) &&
 				r + startY - points[2].getY() <= points[2].slope(points[3]) * (c + startX - points[2].getX())) {
-					System.out.println();
-					int tempR = (int)(RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[3]), r, c, points[0].slope(points[1]), points[0].getX(), points[0].getY())) / RVector.distance(points[0], points[3]) * img.getHeight());
-					int tempC = (int)(RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[1]), r, c, points[0].slope(points[3]), points[0].getX(), points[0].getY())) / RVector.distance(points[0], points[1]) * img.getWidth());
-					img2.setRGB(r, c, img.getRGB(tempR, tempC));
-					//System.out.println(img.getRGB(tempR, tempC));
+					//System.out.println();
+					int tempC = (int)((RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[3]), r, c, points[0].slope(points[1]), points[0].getX() - startX, points[0].getY() - startY)) / RVector.distance(points[0], points[3])) * img.getHeight());
+					int tempR = (int)((RVector.distance(new RVector(r, c), RVector.solutionPointSlope(points[0].slope(points[1]), r, c, points[0].slope(points[3]), points[0].getX() - startX, points[0].getY() - startY)) / RVector.distance(points[0], points[1])) * img.getWidth());
+					
+					System.out.println(r + " " + c + ": " + tempR + ", " + tempC + ": " + img.getWidth() + ", " + img.getHeight());
+					//System.out.println(RVector.solutionPointSlope(points[0].slope(points[3]), r, c, points[0].slope(points[1]), points[0].getX(), points[0].getY()));// / RVector.distance(points[0], points[3])) * img.getHeight());
+					//System.out.println(points[0].slope(points[3]));
+					
 					//newPixels[r][c] = pixels[tempR][tempC];
+					try{
+					img2.setRGB(r, c, img.getRGB(tempR, tempC));
+					} catch(ArrayIndexOutOfBoundsException e) {
+						System.out.println("Out of Bounds!");
+						img2.setRGB(r, c, Color.YELLOW.getRGB());
+					}
+				} else {
+					img2.setRGB(r, c, Color.TRANSLUCENT);
 				}
 			}
 		}
