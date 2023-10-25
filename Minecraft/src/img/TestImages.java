@@ -53,18 +53,31 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
    public void paintComponent(Graphics g) {
       //Graphics2D g2 = (Graphics2D) g;
       
-	   /*RVector points[] = {new RVector(50, 100),
+	   RVector points[] = {new RVector(50, 100),
 							new RVector(100, 100),
-							new RVector(50, 150),
-							new RVector(100, 150)};*/
-      RVector points[] = {new RVector(50, 100),
-							new RVector(100, 100),
-							new RVector(70, 150),
-							new RVector(120, 150)};
-	   g.drawImage(FormatImage.format(Img.GRASS_SIDE, points), 50, 50, null);
+							new RVector(100, 150),
+							new RVector(50, 150)};
+      int xPos = 50; //smallest x value in points
+      int yPos = 100; //smallest y value in points
+
+      /*RVector points[] = {new RVector(50, 100),
+							new RVector(100, 90),
+							new RVector(110, 140),
+                     new RVector(60, 150)};
+      int xPos = 50; //smallest x value in points
+      int yPos = 90; //smallest y value in points*/
+
+	   g.drawImage(FormatImage.format(Img.GRASS_SIDE, points), xPos, yPos, null);
 	   
       g.setColor(Color.RED);
-      g.drawRect(50, 50, 50, 50);
+
+      int[] xPoints = new int[points.length];
+      int[] yPoints = new int[points.length];
+      for(int i = 0; i < points.length; i++) {
+         xPoints[i] = (int)points[i].getX();
+         yPoints[i] = (int)points[i].getY();
+      }
+      g.drawPolygon(xPoints, yPoints, points.length);
    }
    
    public void mousePressed(MouseEvent e) {    }

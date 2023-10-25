@@ -76,7 +76,7 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    //returns the solution of two linear equations in point-slope form as an RVector (AKA the intersection of two lines)
    public static RVector solutionPointSlope(double m1, double x1, double y1, double m2, double x2, double y2) {
       if(Math.abs(m1 - m2) <= 0.0000001) {
-         return null; //if the two lines are parallel (they don't intersect)
+         return null; //if the two lines have the same slope/are parallel (they don't intersect)
       }
       
       //If one/both of the lines have an undefined slope
@@ -86,10 +86,10 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
          } else {
             return new RVector(x1, m2*x1 + (-m2 * x2 + y2));
          }
-         //return null;
       } else if(m2 == java.lang.Double.POSITIVE_INFINITY || m2 == java.lang.Double.NEGATIVE_INFINITY) {
          return new RVector(x2, m1*x2 + (-m1 * x1 + y1));
       }
+
 	   return solutionSlopeIntercept(m1, -m1 * x1 + y1, m2, -m2 * x2 + y2);
    }
    
