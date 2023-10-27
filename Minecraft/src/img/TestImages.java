@@ -1,8 +1,9 @@
 package img;
 
-import geom.RVector;
-
 import javax.swing.JFrame;
+
+import geom.basic.RVector;
+
 //import javax.swing.Timer;
 import javax.swing.JComponent;
 //import java.util.ArrayList;
@@ -21,6 +22,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class TestImages extends JComponent implements ActionListener, MouseListener{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	//FIELDS
    private int screenWidth, screenHeight;
@@ -108,6 +114,7 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
 
 class Run {
    public static void main(String[] args) {
+      @SuppressWarnings("unused")
       TestImages m = new TestImages();
    }
 }

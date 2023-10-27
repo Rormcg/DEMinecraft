@@ -1,7 +1,6 @@
-package geom;
+package geom.basic;
 
 import java.awt.Graphics;
-import java.awt.Color;
 
 public class Octahedron extends Shape3D{
    
@@ -43,7 +42,7 @@ public class Octahedron extends Shape3D{
    
    @Override
    public void draw(Graphics g) {
-      RVector3D[] h = super.getPoints();
+      //RVector3D[] h = super.getPoints();
       
       for(int i = 0; i < getLines().length; i++) {
          g.drawLine((int)getPoints()[getLines()[i][0]].getX(), (int)getPoints()[getLines()[i][0]].getY(),

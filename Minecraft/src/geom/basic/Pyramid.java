@@ -1,4 +1,4 @@
-package geom;
+package geom.basic;
 
 import java.awt.Graphics;
 import java.util.Arrays;
@@ -52,7 +52,7 @@ public class Pyramid extends Shape3D{
    
    @Override
    public void draw(Graphics g) {
-      RVector3D[] h = super.getPoints();
+      //RVector3D[] h = super.getPoints();
       
       /*
       for(int i = 0; i < getLines().length; i++) {

@@ -4,9 +4,14 @@ Rory McGuire
 RVector
 Represents a 3D Vector
 */
-package geom;
+package geom.basic;
 
 public class RVector3D extends RVector { 
+   /**
+	 * 
+	 */
+   private static final long serialVersionUID = 1L;
+   
    private double z;
    
    

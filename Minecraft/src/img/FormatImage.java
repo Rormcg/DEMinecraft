@@ -1,6 +1,8 @@
 package img;
 
-import geom.*;
+//import geom.*;
+import geom.basic.Face;
+import geom.basic.RVector;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -14,7 +16,7 @@ public class FormatImage {
 	public static BufferedImage format(BufferedImage img, Face f) {
 		RVector[] points = (RVector[])f.getPoints();
 
-		//init values to determine the edges of the formatted image
+		//init values to determine the min/max values of the formatted image to determine the dimensions
 		double startY = Double.MAX_VALUE;
 		double endY = -Double.MAX_VALUE;
 		double startX = Double.MAX_VALUE;
@@ -33,7 +35,7 @@ public class FormatImage {
 		AffineTransform a = new AffineTransform();
 		
 		//set the scaling required to go from img to img2
-		g2D.scale((int)(points[0].distance(points[1]) / img.getWidth()), (int)(points[1].distance(points[2])) / img.getHeight());
+		g2D.scale(points[0].distance(points[1]) / img.getWidth(), points[1].distance(points[2]) / img.getHeight());
 
 		//find the x and y shear factors
 
@@ -57,6 +59,8 @@ public class FormatImage {
 		g2D.transform(a);
 
 		g2D.drawImage(img, 0, 0, null);
+		g2D.setColor(Color.CYAN);
+		g2D.drawRect(0, 0, 10, 10);
 		g2D.dispose();
 
 		return img2;

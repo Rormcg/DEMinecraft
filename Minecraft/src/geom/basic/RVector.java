@@ -4,11 +4,16 @@ Rory McGuire
 RVector
 Represents a 2D Vector
 */
-package geom;
+package geom.basic;
 
 import java.awt.geom.Point2D;
 
 public class RVector extends Point2D.Double implements Comparable<RVector>{ 
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
    public RVector() {super();}
    public RVector (double x, double y) {super(x, y);}
    

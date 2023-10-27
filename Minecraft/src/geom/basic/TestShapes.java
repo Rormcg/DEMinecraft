@@ -1,21 +1,18 @@
-package geom;
-
-
-
+package geom.basic;
 
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
 import javax.swing.JComponent;
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
+//import java.util.ArrayList;
+//import javax.swing.JOptionPane;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
+//import java.awt.geom.Point2D;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Font;
+//import java.awt.Font;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +20,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class TestShapes extends JComponent implements ActionListener, MouseListener{
+   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+   
    //FIELDS
    private int screenWidth, screenHeight;
    private JFrame frame;
@@ -95,7 +97,8 @@ public class TestShapes extends JComponent implements ActionListener, MouseListe
 }
 
 class Run {
-   public static void main(String[] args) {
-      TestShapes m = new TestShapes();
+	public static void main(String[] args) {
+		@SuppressWarnings("unused")
+		TestShapes m = new TestShapes();
    }
 }
