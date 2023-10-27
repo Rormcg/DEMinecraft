@@ -3,14 +3,65 @@ package img;
 import geom.*;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class FormatImage {
 	
 	
 	//Must be a parallelogram
-	public static BufferedImage format(Img i, RVector[] points) {
-		if(points.length != 4) throw new IllegalArgumentException("RVector[] points must be length of 4");
+	public static BufferedImage format(BufferedImage img, Face f) {
+		RVector[] points = (RVector[])f.getPoints();
+
+		//init values to determine the edges of the formatted image
+		double startY = Double.MAX_VALUE;
+		double endY = -Double.MAX_VALUE;
+		double startX = Double.MAX_VALUE;
+		double endX = -Double.MAX_VALUE;
+		for(int i = 0; i < points.length; i ++) {
+			if(points[i].getX() < startX) startX = points[i].getX();
+			if(points[i].getX() > endX) endX = points[i].getX();
+			if(points[i].getY() < startY) startY = points[i].getY();
+			if(points[i].getY() > endY) endY = points[i].getY();
+		}
+
+		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), img.getType());
+
+		Graphics2D g2D = img2.createGraphics();
+
+		AffineTransform a = new AffineTransform();
+		
+		//set the scaling required to go from img to img2
+		g2D.scale((int)(points[0].distance(points[1]) / img.getWidth()), (int)(points[1].distance(points[2])) / img.getHeight());
+
+		//find the x and y shear factors
+
+		//find the intersection between points[3, 2] and the line perpendicular to points[0, 1] that also intersects points[0]
+		//this will find the point that points[3] that should be in if there was no shear transformation
+		RVector temp = RVector.solutionPointSlope(points[3].slope(points[2]), points[3].getX(), points[3].getY(), points[0].perpendicularSlope(points[1]), points[0].getX(), points[0].getY());
+		//find the difference between that intersection and the actual position of points[3], then represent that as a factor of the width of img2
+		double shearX = points[3].distance(temp) / points[3].distance(points[2]);
+
+		//repeat for the y shear factor
+		temp = RVector.solutionPointSlope(points[1].slope(points[2]), points[1].getX(), points[1].getY(), points[0].perpendicularSlope(points[3]), points[0].getX(), points[0].getY());
+		double shearY = points[1].distance(temp) / points[1].distance(points[2]);
+
+
+		//set the shear(x and y distortion) to go from img to img2
+		a.setToShear(shearX, shearY);
+		g2D.transform(a);
+
+		//set the rotation required to go from img to img2
+		a.setToRotation(new RVector(img.getWidth(), img.getHeight()).findRotationTo(points[0].sub(points[2])), img.getWidth(), img.getHeight());
+		g2D.transform(a);
+
+		g2D.drawImage(img, 0, 0, null);
+		g2D.dispose();
+
+		return img2;
+
+		/*if(points.length != 4) throw new IllegalArgumentException("RVector[] points must be length of 4");
 		
 		//Order the points so as to follow this pattern: 0   1
 		//												 3   2
@@ -64,11 +115,8 @@ public class FormatImage {
 		//For empty pixels, use Color.TRANSLUCENT
 		for(int r = 0; r < img2.getHeight(); r ++) {
 			for(int c = 0; c < img2.getWidth(); c ++) {
-				//check for (r, c) is in the quad; use inequalities
-				if(r + startY - points[1].getY() <= points[1].slope(points[2]) * (c + startX - points[1].getX()) &&
-				r + startY - points[0].getY() >= points[0].slope(points[1]) * (c + startX - points[0].getX()) &&
-				r + startY - points[1].getY() >= points[1].slope(points[0]) * (c + startX - points[1].getX()) &&
-				r + startY - points[2].getY() <= points[2].slope(points[3]) * (c + startX - points[2].getX())) {
+				//check for (r, c) is in the quad
+				if(f.containsPoint(new RVector(c + startX, r + startY))) {
 					//System.out.println();
 					int tempR = (int)((RVector.distance(new RVector(c, r), RVector.solutionPointSlope(points[0].slope(points[3]), c, r, points[0].slope(points[1]), points[0].getX() - startX, points[0].getY() - startY)) / RVector.distance(points[0], points[3])) * img.getHeight());
 					int tempC = (int)((RVector.distance(new RVector(c, r), RVector.solutionPointSlope(points[0].slope(points[1]), c, r, points[0].slope(points[3]), points[0].getX() - startX, points[0].getY() - startY)) / RVector.distance(points[0], points[1])) * img.getWidth());
@@ -90,7 +138,13 @@ public class FormatImage {
 			}
 		}
 		
-		return img2;
+		return img2;*/
 	}
+
+	//Must be a parallelogram
+	public static BufferedImage format(BufferedImage img, RVector[] points) {
+		return format(img, new Face(points));
+	}
+	
 
 }

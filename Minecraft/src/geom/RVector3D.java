@@ -6,18 +6,16 @@ Represents a 3D Vector
 */
 package geom;
 
-public class RVector3D implements Comparable<RVector3D>{ 
-   private double x, y, z;
+public class RVector3D extends RVector { 
+   private double z;
    
    
    RVector3D() {
-      x = 0;
-      y = 0;
+      super(0, 0);
       z = 0;
    }
    RVector3D (double x, double y, double z) {
-      this.x = x;
-      this.y = y;
+      super(x, y);
       this.z = z;
    }
    
@@ -104,6 +102,13 @@ public class RVector3D implements Comparable<RVector3D>{
       }
    }
    
+   //returns the slope of line containing the x and y values of this and another RVector3D
+   public double slope2D(RVector3D other) {
+	   double s = (getY() - other.getY()) / (getX() - other.getX());
+      if(s == java.lang.Double.NEGATIVE_INFINITY) s = java.lang.Double.POSITIVE_INFINITY;
+      return s;
+   }
+
    //Returns the magnitude of this vector
    public double magnitude() {
       return Math.sqrt(x*x + y*y + z*z);
@@ -116,11 +121,11 @@ public class RVector3D implements Comparable<RVector3D>{
       return other.x == x && other.y == y && other.z == z;
    }
    
-   @Override
+   /*@Override
    //TO DO: make compareTo better
    public int compareTo(RVector3D other) {
       return (int) (magnitude() - other.magnitude());
-   }
+   }*/
    
    public RVector3D copy() {
       return new RVector3D(x, y, z);

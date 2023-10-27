@@ -12,7 +12,7 @@ public class Face implements Comparable<Face> {
 	private RVector3D[] points;
 	private Color color;
 	
-	Face() {
+	public Face() {
 		points = null;
 		color = Color.RED;
 	}
@@ -21,8 +21,16 @@ public class Face implements Comparable<Face> {
 		points = p;
 	}*/
 	
-	Face(RVector3D... p) {
+	public Face(RVector3D... p) {
 		points = p;
+		color = Color.RED;
+	}
+
+	public Face(RVector... p) {
+		points = new RVector3D[p.length];
+		for(int i = 0; i < p.length; i++) {
+			points[i] = new RVector3D(p[i].getX(), p[i].getY(), 0);
+		}
 		color = Color.RED;
 	}
 	
@@ -84,6 +92,31 @@ public class Face implements Comparable<Face> {
 		
 		return 0;
 		*/
+	}
+
+	public boolean containsPoint(RVector p) {
+		return Face.containsPoint(points, p);
+	}
+
+	//check if a 2D point falls within the 2D plane of this quadrilateral
+	public static boolean containsPoint(RVector3D[] points, RVector p) {
+		//if() System.out.println("H");
+		if(((points[1].slope(points[2]) == Double.POSITIVE_INFINITY && p.getX() <= points[1].getX()) || 
+			(points[1].slope(points[2]) > 0 && p.getY() - points[1].getY() >= points[1].slope(points[2]) * (p.getX() - points[1].getX())) ||
+			(points[1].slope(points[2]) <= 0 && p.getY() - points[1].getY() <= points[1].slope(points[2]) * (p.getX() - points[1].getX()))) &&
+		((points[0].slope(points[1]) == Double.POSITIVE_INFINITY && p.getX() <= points[0].getX()) || 
+		(points[0].slope(points[1]) > 0 && p.getY() - points[0].getY() <= points[0].slope(points[1]) * (p.getX() - points[0].getX())) ||
+		(points[0].slope(points[1]) <= 0 && p.getY() - points[0].getY() >= points[0].slope(points[1]) * (p.getX() - points[0].getX()))) &&
+			((points[3].slope(points[0]) == Double.POSITIVE_INFINITY && p.getX() >= points[3].getX()) || 
+			(points[3].slope(points[0]) <= 0 && p.getY() - points[3].getY() >= points[3].slope(points[0]) * (p.getX() - points[3].getX())) ||
+			(points[3].slope(points[0]) > 0 && p.getY() - points[3].getY() <= points[3].slope(points[0]) * (p.getX() - points[3].getX()))) &&
+		((points[2].slope(points[3]) == Double.POSITIVE_INFINITY && p.getX() >= points[2].getX()) || 
+		(points[2].slope(points[3]) > 0 && p.getY() - points[2].getY() >= points[2].slope(points[3]) * (p.getX() - points[2].getX())) ||
+		(points[2].slope(points[3]) <= 0 && p.getY() - points[2].getY() <= points[2].slope(points[3]) * (p.getX() - points[2].getX())))) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	//Returns the Z of the middle of the Face f

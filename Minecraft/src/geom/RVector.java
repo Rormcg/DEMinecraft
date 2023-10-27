@@ -16,11 +16,22 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    public void rotate(double deg) {
       rotateRadians(Math.toRadians(deg));
    }
-   
+
    //Rotates this vector by the specified radians
    public void rotateRadians(double rad) {
       super.setLocation(getX()*Math.cos(rad) - getY()*Math.sin(rad),
                         getX()*Math.sin(rad) + getY()*Math.cos(rad));
+   }
+
+   //Returns the difference in rotation between this and another RVector (the rotation required to rotate this to the other's rotation)
+   //returns as degrees
+   public double findRotationTo(RVector r) {
+      return r.degrees() - this.degrees();
+   }
+
+   //Returns the difference between this point and another RVector
+   public RVector sub(RVector r) {
+      return new RVector(this.x - r.x, this.y - r.y);
    }
    
    //Returns the distance between this point and another RVector
@@ -30,20 +41,23 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    
    //returns the slope of the line containing this and another RVector
    public double slope(RVector other) {
-      //if(getX() - other.getX() == 0) {
-        // return getY() - other.getY() >= 0 ? Double.MAX_VALUE : -Double.MAX_VALUE;
-      //}
-
-	   return (getY() - other.getY()) / (getX() - other.getX());
+	   double s = (getY() - other.getY()) / (getX() - other.getX());
+      if(s == java.lang.Double.NEGATIVE_INFINITY) s = java.lang.Double.POSITIVE_INFINITY;
+      return s;
    }
    
+   //returns the slope of a line perpendicular to the line between this and another RVector
+   public double perpendicularSlope(RVector other) {
+	   double s = (getY() - other.getY()) / (getX() - other.getX());
+      if(s == java.lang.Double.NEGATIVE_INFINITY || s == java.lang.Double.POSITIVE_INFINITY) return 0;
+      return 1 / s;
+   }
+
    //returns the slope of the line containing two RVectors
    public static double slope(RVector a, RVector b) {
-      //if(a.getX() - b.getX() == 0) {
-        // return a.getY() - b.getY() >= 0 ? Double.MAX_VALUE : -Double.MAX_VALUE;
-      //}
-      
-	   return (a.getY() - b.getY()) / (a.getX() - b.getX());
+	   double s = (a.getY() - b.getY()) / (a.getX() - b.getX());
+      if(s == java.lang.Double.NEGATIVE_INFINITY) s = java.lang.Double.POSITIVE_INFINITY;
+      return s;
    }
    
    //Returns the distance between two points (RVectors)
