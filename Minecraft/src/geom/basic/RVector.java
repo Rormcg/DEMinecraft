@@ -24,14 +24,14 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
 
    //Rotates this vector by the specified radians
    public void rotateRadians(double rad) {
-      super.setLocation(getX()*Math.cos(rad) - getY()*Math.sin(rad),
-                        getX()*Math.sin(rad) + getY()*Math.cos(rad));
+      super.setLocation(x*Math.cos(rad) - y*Math.sin(rad),
+                        x*Math.sin(rad) + y*Math.cos(rad));
    }
 
    //Returns the difference in rotation between this and another RVector (the rotation required to rotate this to the other's rotation)
-   //returns as degrees
+   //returns as radians
    public double findRotationTo(RVector r) {
-      return r.degrees() - this.degrees();
+      return r.radians() - this.radians();
    }
 
    //Returns the difference between this point and another RVector
@@ -41,33 +41,33 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    
    //Returns the distance between this point and another RVector
    public double distance(RVector other) {
-      return Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getY() - other.getY(), 2));
+      return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
    }
    
    //returns the slope of the line containing this and another RVector
    public double slope(RVector other) {
-	   double s = (getY() - other.getY()) / (getX() - other.getX());
+	   double s = (y - other.y) / (x - other.x);
       if(s == java.lang.Double.NEGATIVE_INFINITY) s = java.lang.Double.POSITIVE_INFINITY;
       return s;
    }
    
    //returns the slope of a line perpendicular to the line between this and another RVector
    public double perpendicularSlope(RVector other) {
-	   double s = (getY() - other.getY()) / (getX() - other.getX());
+	   double s = (y - other.y) / (x - other.x);
       if(s == java.lang.Double.NEGATIVE_INFINITY || s == java.lang.Double.POSITIVE_INFINITY) return 0;
       return 1 / s;
    }
 
    //returns the slope of the line containing two RVectors
    public static double slope(RVector a, RVector b) {
-	   double s = (a.getY() - b.getY()) / (a.getX() - b.getX());
+	   double s = (a.y - b.y) / (a.x - b.x);
       if(s == java.lang.Double.NEGATIVE_INFINITY) s = java.lang.Double.POSITIVE_INFINITY;
       return s;
    }
    
    //Returns the distance between two points (RVectors)
    public static double distance(RVector v1, RVector v2) {
-      return Math.sqrt(Math.pow(v1.getX() - v2.getX(), 2) + Math.pow(v1.getY() - v2.getY(), 2));
+      return Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2));
    }
    
    //returns the solution of two linear equations in slope-intercept form as an RVector (AKA the intersection of two lines)
@@ -114,7 +114,7 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    
    //Sets this vector's magnitude to the specified length
    public void setMagnitude(double mag) {
-      super.setLocation(getX() / magnitude() * mag, getY() / magnitude() * mag);
+      super.setLocation(x / magnitude() * mag, y / magnitude() * mag);
    }
    
    //Returns the direction of this vector in degrees
@@ -124,26 +124,32 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    
    //Returns the direction of this vector in radians
    public double radians() {
-      double dir = Math.atan(getY() / getX());
+	  if(x == 0 && y != 0) return y > 0 ? 3*Math.PI / 2: Math.PI / 2;
+	  else if(y == 0 && x == 0) return 0;
+	  
+      double dir = Math.atan(y / x);
       
-      if((getX() < 0 && getY() > 0) || (getX() < 0 && getY() < 0)) {
-         dir += 3*Math.PI / 2;
-      } else  {
-         dir += Math.PI / 2;
+      if((x <= 0 && y >= 0) || (x <= 0 && y <= 0)) {
+    	 dir *= -1;
+         dir += Math.PI;
+      } else if(x >= 0 && y >= 0) {
+          dir += Math.PI*2;
+      } else if(x >= 0 && y <= 0) {
+    	  dir *= -1;
       }
-      return dir % (2 * Math.PI);
+      return dir;
    }
    
    //Returns the magnitude of this vector
    public double magnitude() {
-      return Math.sqrt(getX()*getX() + getY()*getY());
+      return Math.sqrt(x*x + y*y);
    }
    
    @Override
    public boolean equals(Object o) {
       if(!(o instanceof RVector)) return false;
       RVector other = (RVector)o;
-      return other.getX() == getX() && other.getY() == getY();
+      return other.x == x && other.y == y;
       //return Math.abs(compareTo(other)) <= 0.0001 && radians() - other.radians() <= 0.0001;
    }
    
@@ -154,6 +160,6 @@ public class RVector extends Point2D.Double implements Comparable<RVector>{
    }
    
    public RVector copy() {
-      return new RVector(getX(), getY());
+      return new RVector(x, y);
    }
 }

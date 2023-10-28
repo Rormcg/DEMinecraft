@@ -77,33 +77,42 @@ public class RVector3D extends RVector {
          case "X":
             dir = Math.atan(y / z);
             
-            if((z < 0 && y > 0) || (z < 0 && y < 0)) {
-               dir += 3*Math.PI / 2;
-            } else {
-               dir += Math.PI / 2;
+            if((z <= 0 && y >= 0) || (z <= 0 && y <= 0)) {
+           	 	dir *= -1;
+                dir += Math.PI;
+            } else if(z >= 0 && y >= 0) {
+                dir += Math.PI*2;
+            } else if(z >= 0 && y <= 0) {
+           	  	dir *= -1;
             }
-            return dir % (2 * Math.PI);
+            return dir;
          case "y":
          case "Y":
             dir = Math.atan(z / x);
             
-            if((x < 0 && z > 0) || (x < 0 && z < 0)) {
-               dir += 3*Math.PI / 2;
-            } else {
-               dir += Math.PI / 2;
+            if((x <= 0 && z >= 0) || (x <= 0 && z <= 0)) {
+           	 	dir *= -1;
+                dir += Math.PI;
+            } else if(x >= 0 && z >= 0) {
+                dir += Math.PI*2;
+            } else if(x >= 0 && z <= 0) {
+           	  	dir *= -1;
             }
-            return dir % (2 * Math.PI);
+            return dir;
          case "z":
          case "Z":
          default:
             dir = Math.atan(y / x);
             
-            if((x < 0 && y > 0) || (x < 0 && y < 0)) {
-               dir += 3*Math.PI / 2;
-            } else {
-               dir += Math.PI / 2;
+            if((x <= 0 && y >= 0) || (x <= 0 && y <= 0)) {
+            	dir *= -1;
+                dir += Math.PI;
+            } else if(x >= 0 && y >= 0) {
+                dir += Math.PI*2;
+            } else if(x >= 0 && y <= 0) {
+           	  	dir *= -1;
             }
-            return dir % (2 * Math.PI);
+            return dir;
       }
    }
    

@@ -28,16 +28,16 @@ public class FormatImage {
 			if(points[i].getY() > endY) endY = points[i].getY();
 		}
 
-		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), img.getType());
+		//BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), img.getType());
+		BufferedImage img2 = new BufferedImage(500, 500, img.getType());
 
+		
 		Graphics2D g2D = img2.createGraphics();
 
-		AffineTransform a = new AffineTransform();
+		//create the transformation for upscaling/downscaling the image
+		AffineTransform scale = AffineTransform.getScaleInstance(points[0].distance(points[1]) / img.getWidth(), points[1].distance(points[2]) / img.getHeight());
 		
-		//set the scaling required to go from img to img2
-		g2D.scale(points[0].distance(points[1]) / img.getWidth(), points[1].distance(points[2]) / img.getHeight());
-
-		//find the x and y shear factors
+		//find the x and y shear factors:
 
 		//find the intersection between points[3, 2] and the line perpendicular to points[0, 1] that also intersects points[0]
 		//this will find the point that points[3] that should be in if there was no shear transformation
@@ -47,20 +47,34 @@ public class FormatImage {
 
 		//repeat for the y shear factor
 		temp = RVector.solutionPointSlope(points[1].slope(points[2]), points[1].getX(), points[1].getY(), points[0].perpendicularSlope(points[3]), points[0].getX(), points[0].getY());
+		System.out.println(temp);
+		System.out.println(points[1].slope(points[2]));
 		double shearY = points[1].distance(temp) / points[1].distance(points[2]);
-
-
+		System.out.println(shearX + " " + shearY);
+		
 		//set the shear(x and y distortion) to go from img to img2
-		a.setToShear(shearX, shearY);
-		g2D.transform(a);
+		AffineTransform shear = AffineTransform.getShearInstance(shearX, shearY);
 
 		//set the rotation required to go from img to img2
-		a.setToRotation(new RVector(img.getWidth(), img.getHeight()).findRotationTo(points[0].sub(points[2])), img.getWidth(), img.getHeight());
+		AffineTransform rotate = AffineTransform.getRotateInstance(new RVector(img.getWidth(), img.getHeight()).findRotationTo(points[2].sub(points[0])), img2.getWidth() / 2.0, img2.getHeight() / 2.0);
+		//System.out.println(points[1].sub(points[0]).radians());
+		//System.out.println(new RVector(img.getWidth(), img.getHeight()));
+		//System.out.println(points[2].sub(points[0]));
+		//AffineTransform rotate = AffineTransform.getRotateInstance(Math.PI/4, 400,-200);
+		//combine the transformations
+		AffineTransform a = new AffineTransform();
+		a.concatenate(scale);
+		a.concatenate(rotate);
+		a.concatenate(shear);
+		
 		g2D.transform(a);
 
+		//g2D.setColor(new Color(0, 0, 0, 0));
+		//g2D.drawRect(0, 0, img2.getWidth(), img2.getHeight());
+		
 		g2D.drawImage(img, 0, 0, null);
-		g2D.setColor(Color.CYAN);
-		g2D.drawRect(0, 0, 10, 10);
+		//g2D.setColor(Color.CYAN);
+		//g2D.drawRect(0, 0, 10, 10);
 		g2D.dispose();
 
 		return img2;

@@ -57,7 +57,7 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
    }
    
    public void paintComponent(Graphics g) {
-      //Graphics2D g2 = (Graphics2D) g;
+	   //Graphics2D g2 = (Graphics2D) g;
       
 	   /*RVector points[] = {new RVector(50, 100),
 							new RVector(100, 100),
@@ -80,7 +80,7 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
       int xPos = 50; //smallest x value in points
       int yPos = 90; //smallest y value in points
 
-	   g.drawImage(FormatImage.format(Img.GRASS_SIDE.img, points), xPos, yPos, null);
+	  g.drawImage(FormatImage.format(Img.GRASS_SIDE.img, points), xPos, yPos, null);
 	   
       g.setColor(Color.RED);
 
