@@ -2,6 +2,9 @@ package geom.basic;
 
 import java.awt.Graphics;
 import java.util.Arrays;
+
+import img.Img;
+
 import java.awt.Color;
 
 public class Rect3D extends Shape3D{
@@ -77,5 +80,11 @@ public class Rect3D extends Shape3D{
    @Override
    public void update() {
       rotate(1, 2, 0);
+   }
+   
+   public void setImages(Img[] img) {
+		for(int i = 0; i < getFaces().length; i++) {
+			getFaces()[i].setImage(img[i]);
+		}
    }
 }

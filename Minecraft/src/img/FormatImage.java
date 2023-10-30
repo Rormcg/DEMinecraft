@@ -28,39 +28,45 @@ public class FormatImage {
 			if(points[i].getY() > endY) endY = points[i].getY();
 		}
 
-		//BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), img.getType());
-		BufferedImage img2 = new BufferedImage(500, 500, img.getType());
+		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), img.getType());
+		//BufferedImage img2 = new BufferedImage(500, 500, img.getType());
 
 		
 		Graphics2D g2D = img2.createGraphics();
-
+		g2D.setBackground(new Color(0, 0, 0, 0));
+		
 		//create the transformation for upscaling/downscaling the image
 		AffineTransform scale = AffineTransform.getScaleInstance(points[0].distance(points[1]) / img.getWidth(), points[1].distance(points[2]) / img.getHeight());
 		
+		//set the rotation required to go from img to img2
+		// TO-DO: check all are using radians/degrees
+		double rotation = new RVector(img.getWidth(), img.getHeight()).findRotationTo(points[2].sub(points[0]));
+		RVector anchor = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
+		
+		AffineTransform rotate = AffineTransform.getRotateInstance(rotation, anchor.getX(), anchor.getY());
+		System.out.println(rotation);
+		//System.out.println(points[1].sub(points[0]).radians());
+		//System.out.println(new RVector(img.getWidth(), img.getHeight()));
+		//System.out.println(points[2].sub(points[0]));
+		//AffineTransform rotate = AffineTransform.getRotateInstance(Math.PI/4, 400,-200);
+		
 		//find the x and y shear factors:
-
-		//find the intersection between points[3, 2] and the line perpendicular to points[0, 1] that also intersects points[0]
-		//this will find the point that points[3] that should be in if there was no shear transformation
-		RVector temp = RVector.solutionPointSlope(points[3].slope(points[2]), points[3].getX(), points[3].getY(), points[0].perpendicularSlope(points[1]), points[0].getX(), points[0].getY());
-		//find the difference between that intersection and the actual position of points[3], then represent that as a factor of the width of img2
-		double shearX = points[3].distance(temp) / points[3].distance(points[2]);
+		
+		//rotate points around the anchor to account for rotation
+		RVector point1 = RVector.rotate(points[1], rotation, anchor);
+		RVector point2 = RVector.rotate(points[2], rotation, anchor);
+		double shearX = 1/point1.slope(point2);
 
 		//repeat for the y shear factor
-		temp = RVector.solutionPointSlope(points[1].slope(points[2]), points[1].getX(), points[1].getY(), points[0].perpendicularSlope(points[3]), points[0].getX(), points[0].getY());
-		System.out.println(temp);
-		System.out.println(points[1].slope(points[2]));
-		double shearY = points[1].distance(temp) / points[1].distance(points[2]);
+		RVector point0 = RVector.rotate(points[0], rotation, anchor);
+		RVector point3 = RVector.rotate(points[3], rotation, anchor);
+		double shearY =  1/point0.slope(point3);
 		System.out.println(shearX + " " + shearY);
 		
 		//set the shear(x and y distortion) to go from img to img2
 		AffineTransform shear = AffineTransform.getShearInstance(shearX, shearY);
 
-		//set the rotation required to go from img to img2
-		AffineTransform rotate = AffineTransform.getRotateInstance(new RVector(img.getWidth(), img.getHeight()).findRotationTo(points[2].sub(points[0])), img2.getWidth() / 2.0, img2.getHeight() / 2.0);
-		//System.out.println(points[1].sub(points[0]).radians());
-		//System.out.println(new RVector(img.getWidth(), img.getHeight()));
-		//System.out.println(points[2].sub(points[0]));
-		//AffineTransform rotate = AffineTransform.getRotateInstance(Math.PI/4, 400,-200);
+		
 		//combine the transformations
 		AffineTransform a = new AffineTransform();
 		a.concatenate(scale);

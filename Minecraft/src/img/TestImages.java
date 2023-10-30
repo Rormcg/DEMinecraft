@@ -66,19 +66,19 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
       int xPos = 50; //smallest x value in points
       int yPos = 100; //smallest y value in points*/
 
-      /*RVector points[] = {new RVector(50, 100),
+      RVector points[] = {new RVector(50, 100),
 							new RVector(100, 90),
 							new RVector(110, 140),
                      new RVector(60, 150)};
       int xPos = 50; //smallest x value in points
-      int yPos = 90; //smallest y value in points*/
+      int yPos = 90; //smallest y value in points
 
-      RVector points[] = {new RVector(50, 90),
+      /*RVector points[] = {new RVector(50, 90),
 							new RVector(100, 100),
 							new RVector(110, 150),
                      new RVector(60, 140)};
       int xPos = 50; //smallest x value in points
-      int yPos = 90; //smallest y value in points
+      int yPos = 90; //smallest y value in points*/
 
 	  g.drawImage(FormatImage.format(Img.GRASS_SIDE.img, points), xPos, yPos, null);
 	   

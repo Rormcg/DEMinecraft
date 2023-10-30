@@ -58,7 +58,7 @@ public class Face implements Comparable<Face> {
 	}
 	
 	public void draw(Graphics g) {
-		/*int[] x = new int[points.length];
+		int[] x = new int[points.length];
 		int[] y = new int[points.length];
 		for(int i = 0; i < points.length; i++) {
 			x[i] = (int)points[i].getX();
@@ -66,8 +66,8 @@ public class Face implements Comparable<Face> {
 		}
 		
 		g.setColor(color);
-		g.fillPolygon(x, y, points.length);*/
-		g.drawImage(FormatImage.format(image.img, this), 0, 0, null);
+		g.fillPolygon(x, y, points.length);
+		//g.drawImage(FormatImage.format(image.img, this), 0, 0, null);
 	}
 	
 	public void update() {
@@ -161,6 +161,10 @@ public class Face implements Comparable<Face> {
 	
 	public RVector3D[] getPoints() {
 		return points;
+	}
+	
+	public void setImage(Img img) {
+		image = img;
 	}
 	
 	public void setPoints(RVector3D[] p) {
