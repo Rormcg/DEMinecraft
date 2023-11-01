@@ -2,6 +2,7 @@ package img;
 
 import javax.swing.JFrame;
 
+import geom.basic.Face;
 import geom.basic.RVector;
 
 //import javax.swing.Timer;
@@ -72,6 +73,13 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
                      new RVector(60, 150)};
       int xPos = 50; //smallest x value in points
       int yPos = 90; //smallest y value in points
+	   
+	   /*RVector points[] = {new RVector(60, 150),
+	    					new RVector(50, 100),
+							new RVector(100, 90),
+							new RVector(110, 140)};
+		int xPos = 50; //smallest x value in points
+		int yPos = 90; //smallest y value in points*/
 
       /*RVector points[] = {new RVector(50, 90),
 							new RVector(100, 100),
@@ -79,8 +87,24 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
                      new RVector(60, 140)};
       int xPos = 50; //smallest x value in points
       int yPos = 90; //smallest y value in points*/
-
-	  g.drawImage(FormatImage.format(Img.GRASS_SIDE.img, points), xPos, yPos, null);
+	   
+	   /*RVector points[] = {new RVector(60, 140),
+	    				new RVector(50, 90),
+						new RVector(100, 100),
+						new RVector(110, 150)};
+		int xPos = 50; //smallest x value in points
+		int yPos = 90; //smallest y value in points*/
+	   
+	  /*RVector points[] = {new RVector(70, 60),
+			  			new RVector(110, 50),
+			  			new RVector(90, 80),
+			  			new RVector(50, 90)};
+	  int xPos = 50; //smallest x value in points
+	  int yPos = 50; //smallest y value in points*/
+      
+      Face f = new Face(Img.GRASS_SIDE, points);
+      f.drawImage(g);
+	  //g.drawImage(FormatImage.format(Img.GRASS_SIDE.img, points), xPos, yPos, null);
 	   
       g.setColor(Color.RED);
 

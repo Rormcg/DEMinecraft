@@ -30,21 +30,39 @@ public class FormatImage {
 
 		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), img.getType());
 		//BufferedImage img2 = new BufferedImage(500, 500, img.getType());
-
+		
+		/*for(int i = 0; i < img2.getHeight(); i++) {
+			for(int j = 0; j < img2.getWidth(); j++) {
+				img2.setRGB(i, j, new Color(0, 0, 0, 0).getRGB());
+			}
+		}*/
 		
 		Graphics2D g2D = img2.createGraphics();
-		g2D.setBackground(new Color(0, 0, 0, 0));
+		//g2D.setBackground(new Color(255, 0, 0, 0));
 		
 		//create the transformation for upscaling/downscaling the image
-		AffineTransform scale = AffineTransform.getScaleInstance(points[0].distance(points[1]) / img.getWidth(), points[1].distance(points[2]) / img.getHeight());
+		RVector scaleFactor = new RVector(points[0].distance(points[1]) / img.getWidth(),
+										points[1].distance(points[2]) / img.getHeight());
+		RVector newDimensions = new RVector((img.getWidth() * scaleFactor.getX()) , (img.getHeight() * scaleFactor.getY()));
+		//AffineTransform scale = AffineTransform.getScaleInstance(scaleFactor.getX(), scaleFactor.getY());
 		
 		//set the rotation required to go from img to img2
 		// TO-DO: check all are using radians/degrees
-		double rotation = new RVector(img.getWidth(), img.getHeight()).findRotationTo(points[2].sub(points[0]));
-		RVector anchor = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
+		System.out.println((img2.getWidth()) + " " + img2.getWidth() + " " +
+							newDimensions.getX() + " " + newDimensions.getY());
+		//RVector translation = new RVector(img2.getWidth() - (img.getWidth() * scaleFactor.getX()),
+		//								img2.getHeight() - (img.getHeight() * scaleFactor.getY()));
+		RVector translation = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);//img2.getWidth() - img.getWidth() * scaleFactor.getX(), img2.getHeight() - img.getHeight() * scaleFactor.getY());
+		System.out.println(translation);
+		AffineTransform translate = AffineTransform.getTranslateInstance(translation.getX(), translation.getY());
 		
-		AffineTransform rotate = AffineTransform.getRotateInstance(rotation, anchor.getX(), anchor.getY());
+		double rotation = new RVector(img.getWidth(), img.getHeight()).findRotationTo(RVector.sub(points[2], points[0]));
 		System.out.println(rotation);
+		//RVector anchor = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
+		RVector anchor = new RVector(newDimensions.getX() / 2.0, newDimensions.getY() / 2.0);
+		//anchor = new RVector();
+		AffineTransform rotate = AffineTransform.getRotateInstance(rotation, anchor.getX(), anchor.getY());
+		//System.out.println(rotation);
 		//System.out.println(points[1].sub(points[0]).radians());
 		//System.out.println(new RVector(img.getWidth(), img.getHeight()));
 		//System.out.println(points[2].sub(points[0]));
@@ -53,14 +71,17 @@ public class FormatImage {
 		//find the x and y shear factors:
 		
 		//rotate points around the anchor to account for rotation
-		RVector point1 = RVector.rotate(points[1], rotation, anchor);
-		RVector point2 = RVector.rotate(points[2], rotation, anchor);
-		double shearX = 1/point1.slope(point2);
+		RVector anchor2 = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
+		RVector point1 = RVector.rotate(points[1], -rotation, anchor2);
+
+		RVector point3 = RVector.rotate(points[3], -rotation, anchor2);
+		RVector point2 = RVector.rotate(points[2], -rotation, anchor2);
+		double shearX = -0.7;//1/point3.slope(point2);
 
 		//repeat for the y shear factor
-		RVector point0 = RVector.rotate(points[0], rotation, anchor);
-		RVector point3 = RVector.rotate(points[3], rotation, anchor);
-		double shearY =  1/point0.slope(point3);
+		RVector point0 = RVector.rotate(points[0], -rotation, anchor2);
+		double shearY =  -0.35;//1/point0.slope(point3);
+		System.out.println(point3.slope(point2) + " " + point0.slope(point3));
 		System.out.println(shearX + " " + shearY);
 		
 		//set the shear(x and y distortion) to go from img to img2
@@ -69,16 +90,18 @@ public class FormatImage {
 		
 		//combine the transformations
 		AffineTransform a = new AffineTransform();
-		a.concatenate(scale);
+		//a.concatenate(scale);
 		a.concatenate(rotate);
-		a.concatenate(shear);
+		a.concatenate(translate);
+		//a.concatenate(shear);
 		
 		g2D.transform(a);
 
 		//g2D.setColor(new Color(0, 0, 0, 0));
 		//g2D.drawRect(0, 0, img2.getWidth(), img2.getHeight());
+		//g2D.translate((int)(img.getWidth() / 2.0), (int)(img.getHeight() / 2.0));
+		g2D.drawImage(img, (int)(-newDimensions.getX() / 2.0) , (int)(-newDimensions.getY() / 2.0), (int)newDimensions.getX(), (int)newDimensions.getY(), null);
 		
-		g2D.drawImage(img, 0, 0, null);
 		//g2D.setColor(Color.CYAN);
 		//g2D.drawRect(0, 0, 10, 10);
 		g2D.dispose();

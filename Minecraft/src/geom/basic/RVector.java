@@ -79,15 +79,23 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 	public double findRotationTo(RVector r) {
 		return r.radians() - this.radians();
 	}
-
+	
+	public static RVector sub(RVector r1, RVector r2) {
+		return new RVector(r1.getX() - r2.getX(), r1.getY() - r2.getY());
+	}
+	
+	public static RVector add(RVector r1, RVector r2) {
+		return new RVector(r1.getX() + r2.getX(), r1.getY() + r2.getY());
+	}
+	
 	// Returns the difference between this point and another RVector
-	public RVector sub(RVector r) {
-		return new RVector(this.x - r.x, this.y - r.y);
+	public void sub(RVector r) {
+		setLocation(this.x - r.x, this.y - r.y);
 	}
 
 	// Returns the sum of this point and another RVector
-	public RVector add(RVector r) {
-		return new RVector(this.x + r.x, this.y + r.y);
+	public void add(RVector r) {
+		setLocation(this.x + r.x, this.y + r.y);
 	}
 	
 	// Returns the distance between this point and another RVector

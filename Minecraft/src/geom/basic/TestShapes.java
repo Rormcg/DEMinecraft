@@ -3,6 +3,9 @@ package geom.basic;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
+
+import geom.block.Grass;
+
 import javax.swing.JComponent;
 //import java.util.ArrayList;
 //import javax.swing.JOptionPane;
@@ -35,9 +38,9 @@ public class TestShapes extends JComponent implements ActionListener, MouseListe
       screenHeight = 500;
       
       //shapes = new Shape3D[1];
-      //shapes = new Shape3D[]{new Cube(-50, -50, -50, 100)};
+      shapes = new Shape3D[]{new Grass(-50, -50, -50, 100)};
       //shapes = new Shape3D[]{new Octahedron(0, -100, 0, 70, 100, 70)};
-      shapes = new Shape3D[]{new Rect3D(-100, -50, -40, 200, 100, 80)};
+      //shapes = new Shape3D[]{new Rect3D(-100, -50, -40, 200, 100, 80)};
       //shapes = new Shape3D[]{new Pyramid(-50, -50, -50, 100, 100, 100)};
       
       /*      
