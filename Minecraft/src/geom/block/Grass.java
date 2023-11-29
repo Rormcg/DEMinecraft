@@ -12,13 +12,13 @@ public class Grass extends Block {
 		setImages(IMAGES);
 	}
 
-	public Grass(double x, double y, double z, double s) {
-		super(x, y, z, s);
+	public Grass(double x, double y, double z) {
+		super(x, y, z);
 		setImages(IMAGES);
 	}
 
-	public Grass(RVector3D pos, double s) {
-		super(pos, s);
+	public Grass(RVector3D pos) {
+		super(pos);
 		setImages(IMAGES);
 	}
 

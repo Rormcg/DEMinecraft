@@ -5,19 +5,18 @@ import geom.basic.RVector3D;
 
 public class Block extends Cube {
 	
+	public static double SIZE = 100;
+	
 	public Block(RVector3D[] nodes) {
 		super(nodes);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public Block(double x, double y, double z) {
+		super(x, y, z, SIZE);
 	}
 
-	public Block(double x, double y, double z, double s) {
-		super(x, y, z, s);
-		// TODO Auto-generated constructor stub
-	}
-
-	public Block(RVector3D pos, double s) {
-		super(pos, s);
-		// TODO Auto-generated constructor stub
+	public Block(RVector3D pos) {
+		super(pos, SIZE);
 	}
 
 }
