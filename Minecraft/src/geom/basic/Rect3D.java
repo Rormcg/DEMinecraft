@@ -43,12 +43,12 @@ public class Rect3D extends Shape3D{
       super.setPoints(nodes);
       
       Face[] f = {
-      new Face(nodes[0], nodes[1], nodes[3], nodes[2]),
-      new Face(nodes[0], nodes[1], nodes[5], nodes[4]),
-      new Face(nodes[4], nodes[6], nodes[7], nodes[5]),
-      new Face(nodes[1], nodes[5], nodes[7], nodes[3]),
+      new Face(nodes[0], nodes[2], nodes[3], nodes[1]),
+      new Face(nodes[4], nodes[0], nodes[1], nodes[5]),
+      new Face(nodes[6], nodes[4], nodes[5], nodes[7]),
+      new Face(nodes[5], nodes[1], nodes[3], nodes[7]),
       new Face(nodes[2], nodes[6], nodes[7], nodes[3]),
-      new Face(nodes[0], nodes[4], nodes[6], nodes[2])};
+      new Face(nodes[4], nodes[6], nodes[2], nodes[0])};
       
       for(int i = 0; i < f.length; i++) {
     	  f[i].setColor(new Color((int)(Math.random() * 255 + 1), (int)(Math.random() * 255 + 1), (int)(Math.random() * 255 + 1)));

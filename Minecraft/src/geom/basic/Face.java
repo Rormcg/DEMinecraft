@@ -61,36 +61,54 @@ public class Face implements Comparable<Face> {
 	}
 	
 	public void draw(Graphics g) {
-		/*int[] x = new int[points.length];
-		int[] y = new int[points.length];
-		for(int i = 0; i < points.length; i++) {
-			x[i] = (int)points[i].getX();
-			y[i] = (int)points[i].getY();
+		if(this.image == null) {
+			int[] x = new int[points.length];
+			int[] y = new int[points.length];
+			for(int i = 0; i < points.length; i++) {
+				x[i] = (int)points[i].getX();
+				y[i] = (int)points[i].getY();
+			}
+			
+			g.setColor(color);
+			g.fillPolygon(x, y, points.length);
+		} else {
+			//g.drawImage(FormatImage.format(image.img, this), 0, 0, null);
+			drawImage(g);
 		}
 		
-		g.setColor(color);
-		g.fillPolygon(x, y, points.length);*/
-		//g.drawImage(FormatImage.format(image.img, this), 0, 0, null);
-		drawImage(image.img, g);
+	    g.setColor(Color.RED);
+
+        int[] xPoints = new int[points.length];
+        int[] yPoints = new int[points.length];
+        for(int i = 0; i < points.length; i++) {
+           xPoints[i] = (int)points[i].getX();
+           yPoints[i] = (int)points[i].getY();
+        }
+        g.drawPolygon(xPoints, yPoints, points.length);
+		
 	}
 	
 	//Must be a parallelogram
 	public void drawImage(BufferedImage img, Graphics g) {
 		//RVector[] points = (RVector[])f.getPoints();
-
+		
+		//for(int i = 0; i < points.length; i++) {
+			//points[i] = (RVector3D)RVector.rotate(points[i], 90, new RVector((points[2].getX() - points[0].getX()) * 0.5, (points[2].getY() - points[0].getY()) * 0.5));
+		//}
+		
 		//init values to determine the min/max values of the formatted image to determine the dimensions
-		double startY = Double.MAX_VALUE;
-		double endY = -Double.MAX_VALUE;
-		double startX = Double.MAX_VALUE;
-		double endX = -Double.MAX_VALUE;
+		RVector start = new RVector(Double.MAX_VALUE, Double.MAX_VALUE);
+		RVector end = new RVector(-Double.MAX_VALUE, -Double.MAX_VALUE);
 		for(int i = 0; i < points.length; i ++) {
-			if(points[i].getX() < startX) startX = points[i].getX();
-			if(points[i].getX() > endX) endX = points[i].getX();
-			if(points[i].getY() < startY) startY = points[i].getY();
-			if(points[i].getY() > endY) endY = points[i].getY();
+			if(points[i].getX() < start.getX()) start.setX(points[i].getX());
+			if(points[i].getX() > end.getX()) end.setX(points[i].getX());
+			if(points[i].getY() < start.getY()) start.setY(points[i].getY());
+			if(points[i].getY() > end.getY()) end.setY(points[i].getY());
 		}
+		
+		
 
-		BufferedImage img2 = new BufferedImage((int)(endX - startX), (int)(endY - startY), BufferedImage.TYPE_INT_ARGB);//img.getType());
+		BufferedImage img2 = new BufferedImage((int)(end.getX() - start.getX()), (int)(end.getY() - start.getY()), BufferedImage.TYPE_INT_ARGB);//img.getType());
 		//BufferedImage img2 = new BufferedImage(500, 500, img.getType());
 		
 		Graphics2D g2D = img2.createGraphics();
@@ -124,19 +142,36 @@ public class Face implements Comparable<Face> {
 		//AffineTransform rotate = AffineTransform.getRotateInstance(Math.PI/4, 400,-200);
 		
 		//find the x and y shear factors:
-		
+		//rotation = 0;
 		//rotate points around the anchor to account for rotation
-		RVector anchor2 = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
-		RVector point1 = RVector.rotate(points[1], -rotation, anchor2);
+		//RVector anchor2 = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
+		//RVector point1 = RVector.rotate(points[1], -rotation, anchor);
 
-		RVector point3 = RVector.rotate(points[3], -rotation, anchor2);
-		RVector point2 = RVector.rotate(points[2], -rotation, anchor2);
-		double shearX = point3.slope(point2);
+		//RVector point3 = RVector.rotate(points[3], -rotation, anchor);
+		
+		//temporary points array that has been rotated according to the previously found rotation
+		//RVector[] tempPoints = new RVector[points.length];
+		//for(int i = 0; i < tempPoints.length; i++) {
+			//tempPoints[i] = RVector.rotate(points[i], rotation, RVector.midpoint(points[0], points[2]));
+		//}
+		
+		
+		//RVector point2 = RVector.rotate(RVector.sub(points[2], start), -rotation, anchor);
+		//RVector unshearedPoint2 = RVector.rotate(new RVector(newDimensions.getX(), newDimensions.getY()), -rotation, anchor);
+		RVector point2 = new RVector(points[2]);
+		RVector unshearedPoint2 = end;//new RVector(img.getWidth(), img.getHeight());
+		//System.out.println(point2 + " " + unshearedPoint2);
+		double shearX = (point2.getX() - unshearedPoint2.getX()) / point2.getY();
+		double shearY = 0;//(point2.getY() - unshearedPoint2.getY()) / point2.getX();
+		
+		//double shearX = point3.slope(point2);
 
 		//repeat for the y shear factor
-		RVector point0 = RVector.rotate(points[0], -rotation, anchor2);
-		double shearY =  point0.slope(point3);
-		System.out.println(point3.slope(point2) + " " + point0.slope(point3));
+		//RVector point0 = RVector.rotate(points[0], -rotation, anchor);
+		//RVector unshearedPoint0 = RVector.rotate(new RVector(0, 0), -rotation, anchor);
+		//double shearY = (point0.getY() - unshearedPoint0.getY()) / point0.getX();
+		//double shearY =  point0.slope(point3);
+		//System.out.println(point3.slope(point2) + " " + point0.slope(point3));
 		System.out.println(shearX + " " + shearY);
 		
 		//set the shear(x and y distortion) to go from img to img2
@@ -146,7 +181,7 @@ public class Face implements Comparable<Face> {
 		//combine the transformations
 		AffineTransform a = new AffineTransform();
 		//a.concatenate(scale);
-		a.concatenate(rotate);
+		//a.concatenate(rotate);
 		a.concatenate(translate);
 		a.concatenate(shear);
 		
@@ -155,13 +190,13 @@ public class Face implements Comparable<Face> {
 		//g2D.setColor(new Color(0, 0, 0, 0));
 		//g2D.drawRect(0, 0, img2.getWidth(), img2.getHeight());
 		//g2D.translate((int)(img.getWidth() / 2.0), (int)(img.getHeight() / 2.0));
-		g2D.drawImage(img, (int)(-newDimensions.getX() / 2.0) , (int)(-newDimensions.getY() / 2.0), (int)newDimensions.getX(), (int)newDimensions.getY(), null);
+		g2D.drawImage(img, (int)(-newDimensions.getX() / 2.0), (int)(-newDimensions.getY() / 2.0), (int)newDimensions.getX(), (int)newDimensions.getY(), null);
 		
 		//g2D.setColor(Color.CYAN);
 		//g2D.drawRect(0, 0, 10, 10);
 		g2D.dispose();
 
-		g.drawImage(img2, (int)startX, (int)startY, null);
+		g.drawImage(img2, (int)start.getX(), (int)start.getY(), null);
 		//return img2;
 	}
 	

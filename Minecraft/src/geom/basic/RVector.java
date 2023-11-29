@@ -38,6 +38,10 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 		return temp;
 	}
 	
+	public static RVector midpoint(RVector r1, RVector r2) {
+		return new RVector((r1.x + r2.x) / 2, (r1.y + r2.y) / 2);
+	}
+	
 	public static RVector rotateRadians(RVector r, double rad) {
 		RVector temp = new RVector(r);
 		temp.rotateRadians(rad);
@@ -233,7 +237,15 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 		if(other == null) return 1;
 		return (int) (magnitude() - other.magnitude());
 	}
-
+	
+	public void setX(double a) {
+		setLocation(a, y);
+	}
+	
+	public void setY(double a) {
+		setLocation(x, a);
+	}
+	
 	public RVector copy() {
 		return new RVector(x, y);
 	}
