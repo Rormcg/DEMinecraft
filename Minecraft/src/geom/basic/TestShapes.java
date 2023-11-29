@@ -38,8 +38,8 @@ public class TestShapes extends JComponent implements ActionListener, MouseListe
       screenHeight = 500;
       
       //shapes = new Shape3D[1];
-      //shapes = new Shape3D[]{new Grass(-50, -50, -50, 100)};
-      shapes = new Shape3D[]{new Cube(-50, -50, -50, 100)};
+      shapes = new Shape3D[]{new Grass(-50, -50, -50, 100)};
+      //shapes = new Shape3D[]{new Cube(-50, -50, -50, 100)};
       //shapes = new Shape3D[]{new Octahedron(0, -100, 0, 70, 100, 70)};
       //shapes = new Shape3D[]{new Rect3D(-100, -50, -40, 200, 100, 80)};
       //shapes = new Shape3D[]{new Pyramid(-50, -50, -50, 100, 100, 100)};
@@ -54,7 +54,7 @@ public class TestShapes extends JComponent implements ActionListener, MouseListe
       content.setBackground(Color.WHITE);
       content.add(this);
       
-      Timer t = new Timer(1, this);
+      Timer t = new Timer(50, this);
       t.start();
       
       frame.setSize(screenWidth+17, screenHeight+40);

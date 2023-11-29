@@ -8,6 +8,7 @@ import img.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
@@ -90,13 +91,10 @@ public class Face implements Comparable<Face> {
 	
 	//Must be a parallelogram
 	public void drawImage(BufferedImage img, Graphics g) {
-		//RVector[] points = (RVector[])f.getPoints();
+		//TO DO: CHECK IF IMAGE IS REVERSED, IF SO, DO NOT DRAW
+
 		
-		//for(int i = 0; i < points.length; i++) {
-			//points[i] = (RVector3D)RVector.rotate(points[i], 90, new RVector((points[2].getX() - points[0].getX()) * 0.5, (points[2].getY() - points[0].getY()) * 0.5));
-		//}
-		
-		//init values to determine the min/max values of the formatted image to determine the dimensions
+		//Define important values for the edges of the image
 		RVector start = new RVector(Double.MAX_VALUE, Double.MAX_VALUE);
 		RVector end = new RVector(-Double.MAX_VALUE, -Double.MAX_VALUE);
 		for(int i = 0; i < points.length; i ++) {
@@ -106,97 +104,79 @@ public class Face implements Comparable<Face> {
 			if(points[i].getY() > end.getY()) end.setY(points[i].getY());
 		}
 		
+		//Do not draw if this image is squished to width/height of 0
+		if(end.x - start.x <= 0.000001 || end.y - start.y <= 0.000001) {
+			return;
+		}
 		
-
+		//The image to be eventually drawn
 		BufferedImage img2 = new BufferedImage((int)(end.getX() - start.getX()), (int)(end.getY() - start.getY()), BufferedImage.TYPE_INT_ARGB);//img.getType());
-		//BufferedImage img2 = new BufferedImage(500, 500, img.getType());
 		
+		//The Graphics to transform the image onto
 		Graphics2D g2D = img2.createGraphics();
 		
-		//create the transformation for upscaling/downscaling the image
-		RVector scaleFactor = new RVector(points[0].distance(points[1]) / img.getWidth(),
-										points[1].distance(points[2]) / img.getHeight());
-		RVector newDimensions = new RVector((img.getWidth() * scaleFactor.getX()) , (img.getHeight() * scaleFactor.getY()));
-		//AffineTransform scale = AffineTransform.getScaleInstance(scaleFactor.getX(), scaleFactor.getY());
-		
-		//set the rotation required to go from img to img2
-		// TO-DO: check all are using radians/degrees
-		System.out.println((img2.getWidth()) + " " + img2.getWidth() + " " +
-							newDimensions.getX() + " " + newDimensions.getY());
-		//RVector translation = new RVector(img2.getWidth() - (img.getWidth() * scaleFactor.getX()),
-		//								img2.getHeight() - (img.getHeight() * scaleFactor.getY()));
+		//TRANSLATION//
 		RVector translation = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);//img2.getWidth() - img.getWidth() * scaleFactor.getX(), img2.getHeight() - img.getHeight() * scaleFactor.getY());
-		System.out.println(translation);
-		AffineTransform translate = AffineTransform.getTranslateInstance(translation.getX(), translation.getY());
-		
-		double rotation = new RVector(img.getWidth(), img.getHeight()).findRotationTo(RVector.sub(points[2], points[0]));
-		System.out.println(rotation);
-		//RVector anchor = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
-		RVector anchor = new RVector(newDimensions.getX() / 2.0, newDimensions.getY() / 2.0);
-		//anchor = new RVector();
-		AffineTransform rotate = AffineTransform.getRotateInstance(rotation, anchor.getX(), anchor.getY());
-		//System.out.println(rotation);
-		//System.out.println(points[1].sub(points[0]).radians());
-		//System.out.println(new RVector(img.getWidth(), img.getHeight()));
-		//System.out.println(points[2].sub(points[0]));
-		//AffineTransform rotate = AffineTransform.getRotateInstance(Math.PI/4, 400,-200);
-		
-		//find the x and y shear factors:
-		//rotation = 0;
-		//rotate points around the anchor to account for rotation
-		//RVector anchor2 = new RVector(img2.getWidth() / 2.0, img2.getHeight() / 2.0);
-		//RVector point1 = RVector.rotate(points[1], -rotation, anchor);
-
-		//RVector point3 = RVector.rotate(points[3], -rotation, anchor);
-		
-		//temporary points array that has been rotated according to the previously found rotation
-		//RVector[] tempPoints = new RVector[points.length];
-		//for(int i = 0; i < tempPoints.length; i++) {
-			//tempPoints[i] = RVector.rotate(points[i], rotation, RVector.midpoint(points[0], points[2]));
-		//}
+		//System.out.println(translation);
 		
 		
-		//RVector point2 = RVector.rotate(RVector.sub(points[2], start), -rotation, anchor);
-		//RVector unshearedPoint2 = RVector.rotate(new RVector(newDimensions.getX(), newDimensions.getY()), -rotation, anchor);
-		RVector point2 = new RVector(points[2]);
-		RVector unshearedPoint2 = end;//new RVector(img.getWidth(), img.getHeight());
-		//System.out.println(point2 + " " + unshearedPoint2);
-		double shearX = (point2.getX() - unshearedPoint2.getX()) / point2.getY();
-		double shearY = 0;//(point2.getY() - unshearedPoint2.getY()) / point2.getX();
+		//ROTATE//
+		//*By multiples of 90 degrees*//
 		
-		//double shearX = point3.slope(point2);
-
-		//repeat for the y shear factor
-		//RVector point0 = RVector.rotate(points[0], -rotation, anchor);
-		//RVector unshearedPoint0 = RVector.rotate(new RVector(0, 0), -rotation, anchor);
-		//double shearY = (point0.getY() - unshearedPoint0.getY()) / point0.getX();
-		//double shearY =  point0.slope(point3);
-		//System.out.println(point3.slope(point2) + " " + point0.slope(point3));
+		//Create a new array of points that will be rotated with the transformations
+		//and is translated to be in the top right corner of the graphics
+		RVector[] newPoints = new RVector[points.length];
+		for(int i = 0; i < points.length; i++) {
+			//copy over the values from points, but they should be placed in the top right of the Graphics
+			newPoints[i] = new RVector(points[i].x - start.x, points[i].y - start.y);
+		}
+		
+		int rotations = 0;
+		//Rotate until newPoints[0] is in the 4th quadrant
+		while(newPoints[0].degrees() <= 180 && newPoints[0].degrees() > 270) {
+			newPoints[0].rotate(-90);
+			rotations++;
+		}
+		
+		
+		//SCALE//
+		//determine the factor for scaling the image
+		//RVector scaleFactor = new RVector(newPoints[0].distance(newPoints[1]) / img.getWidth(),
+										//newPoints[1].distance(newPoints[2]) / img.getHeight());
+		RVector newDimensions = new RVector(newPoints[0].distance(newPoints[1]) , newPoints[1].distance(newPoints[2]));
+		//RVector newDimensions = new RVector(newPoints[1].x - newPoints[0].x, newPoints[2].y - newPoints[1].y);
+		
+		//SHEAR//
+		RVector point2 = new RVector(newPoints[2]);
+		RVector unshearedPoint2 = new RVector(newDimensions.x*0.5 + img2.getWidth()*0.5,newDimensions.y*0.5 + img2.getHeight()*0.5);
+		System.out.println(point2 + " " + unshearedPoint2);
+		/*for(RVector r : newPoints) {
+			System.out.println(r);
+		}*/
+		double shearX = (point2.getX() - unshearedPoint2.getX()) / unshearedPoint2.getY();
+		double shearY = (point2.getY() - unshearedPoint2.getY()) / unshearedPoint2.getX();
 		System.out.println(shearX + " " + shearY);
-		
 		//set the shear(x and y distortion) to go from img to img2
-		AffineTransform shear = AffineTransform.getShearInstance(shearX, shearY);
-
 		
-		//combine the transformations
-		AffineTransform a = new AffineTransform();
-		//a.concatenate(scale);
-		//a.concatenate(rotate);
-		a.concatenate(translate);
-		a.concatenate(shear);
 		
-		g2D.transform(a);
-
-		//g2D.setColor(new Color(0, 0, 0, 0));
-		//g2D.drawRect(0, 0, img2.getWidth(), img2.getHeight());
-		//g2D.translate((int)(img.getWidth() / 2.0), (int)(img.getHeight() / 2.0));
+		
+		//Alter the matrix of Graphics
+		g2D.translate(translation.getX(), translation.getY());
+		g2D.shear(shearX, shearY);
+		g2D.rotate(rotations*(Math.PI/2));
+		
+		//Draw the image onto the distorted Graphics matrix of img2
+		
+		//g2D.setColor(Color.RED);
+		//g2D.fillOval(20, 20, 20, 20);
+		
 		g2D.drawImage(img, (int)(-newDimensions.getX() / 2.0), (int)(-newDimensions.getY() / 2.0), (int)newDimensions.getX(), (int)newDimensions.getY(), null);
-		
-		//g2D.setColor(Color.CYAN);
-		//g2D.drawRect(0, 0, 10, 10);
 		g2D.dispose();
-
+		
+		//now draw img2
 		g.drawImage(img2, (int)start.getX(), (int)start.getY(), null);
+		
+		
 		//return img2;
 	}
 	
