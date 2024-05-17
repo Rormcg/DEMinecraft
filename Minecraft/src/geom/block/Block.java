@@ -11,12 +11,15 @@ public class Block extends Cube {
 		super(nodes);
 	}
 	
+	//will place the block at a location relative to Block.SIZE
+	//x, y, z refer to the coordinates with respect to other blocks,
+	//actual coordinates are derived from Blocks.SIZE and the relative coordinates together
 	public Block(double x, double y, double z) {
-		super(x, y, z, SIZE);
+		super(x*SIZE, y*SIZE, z*SIZE, SIZE);
 	}
 
 	public Block(RVector3D pos) {
-		super(pos, SIZE);
+		super(RVector3D.mult(pos, SIZE), SIZE);
 	}
 
 }

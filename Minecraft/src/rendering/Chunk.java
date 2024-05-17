@@ -22,7 +22,7 @@ public class Chunk {
 		for(int w = 0; w < blocks.length; w++) {
 			for(int h = 0; w < blocks[w].length; h++) {
 				for(int d = 0; d < blocks[w][h].length; d++) {
-					blocks[w][h][d] = new Block(x*WIDTH*Block.SIZE + w*Block.SIZE, y*HEIGHT*Block.SIZE + h*Block.SIZE, d*Block.SIZE);
+					blocks[w][h][d] = new Block(x*WIDTH + w, y*HEIGHT + h, d);
 				}
 			}
 		}

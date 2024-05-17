@@ -79,7 +79,7 @@ public class Rect3D extends Shape3D{
    
    @Override
    public void update() {
-      rotate(1, 2, 0);
+      //rotate(1, 2, 0);
    }
    
    public void setImages(Img[] img) {

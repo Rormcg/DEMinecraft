@@ -1,37 +1,58 @@
-/*
-Rory McGuire
-2/7/2023
-RVector
-Represents a 2D Vector
-*/
 package geom.basic;
 
-import java.awt.geom.Point2D;
-
-public class RVector extends Point2D.Double implements Comparable<RVector> {
+/**
+ * @author Rory McGuire
+ * 2/7/2023
+ * RVector
+ * Represents a 2D Vector
+*/
+public class RVector  implements Comparable<RVector> {	
+	private double x, y;
+	
 	/**
-	 * 
+	 * Creates a new RVector with x and y values 0
 	 */
-	private static final long serialVersionUID = 1L;
-
 	public RVector() {
-		super();
+		this(0, 0);
 	}
-
+	
+	/**
+	 * Creates a new RVector with given x and y values
+	 * @param x the x value for the new RVector
+	 * @param y the y value for the new RVector
+	 */
 	public RVector(double x, double y) {
-		super(x, y);
+		this.x = x;
+		this.y = y;
 	}
 	
+	/**
+	 * Creates a new RVector with the same x and y values as a given RVector
+	 * @param r the RVector to model the new object after
+	 */
 	public RVector(RVector r) {
-		super(r.getX(), r.getY());
+		this(r.x, r.y);
 	}
 	
+	/**
+	 * Gives the result of rotating a given vector by a specified number of degrees
+	 * @param r the vector to be rotated
+	 * @param deg the number fo degrees to rotate
+	 * @return an adequately rotated RVector
+	 */
 	public static RVector rotate(RVector r, double deg) {
 		RVector temp = new RVector(r);
 		temp.rotate(deg);
 		return temp;
 	}
 	
+	/**
+	 * Gives the result of rotating a given vector by a specified number of degrees around a given fixed point
+	 * @param r the vector to be rotated
+	 * @param deg the number of degrees to rotate
+	 * @param anchor the point around which to rotate
+	 * @return an adequately rotated RVector
+	 */
 	public static RVector rotate(RVector r, double deg, RVector anchor) {
 		RVector temp = new RVector(r);
 		temp.rotate(deg, anchor);
@@ -73,7 +94,7 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 	
 	// Rotates this vector by the specified radians
 	public void rotateRadians(double rad) {
-		super.setLocation(x * Math.cos(rad) - y * Math.sin(rad),
+		setLocation(x * Math.cos(rad) - y * Math.sin(rad),
 							x * Math.sin(rad) + y * Math.cos(rad));
 	}
 
@@ -82,24 +103,6 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 	// returns as radians
 	public double findRotationTo(RVector r) {
 		return r.radians() - this.radians();
-	}
-	
-	public static RVector sub(RVector r1, RVector r2) {
-		return new RVector(r1.getX() - r2.getX(), r1.getY() - r2.getY());
-	}
-	
-	public static RVector add(RVector r1, RVector r2) {
-		return new RVector(r1.getX() + r2.getX(), r1.getY() + r2.getY());
-	}
-	
-	// Returns the difference between this point and another RVector
-	public void sub(RVector r) {
-		setLocation(this.x - r.x, this.y - r.y);
-	}
-
-	// Returns the sum of this point and another RVector
-	public void add(RVector r) {
-		setLocation(this.x + r.x, this.y + r.y);
 	}
 	
 	// Returns the distance between this point and another RVector
@@ -188,7 +191,7 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 
 	// Sets this vector's magnitude to the specified length
 	public void setMagnitude(double mag) {
-		super.setLocation(x / magnitude() * mag, y / magnitude() * mag);
+		setLocation(x / magnitude() * mag, y / magnitude() * mag);
 	}
 
 	// Returns the direction of this vector in degrees
@@ -238,12 +241,94 @@ public class RVector extends Point2D.Double implements Comparable<RVector> {
 		return (int) (magnitude() - other.magnitude());
 	}
 	
+	///BASIC MATHEMATICAL METHODS///
+	public static RVector mult(RVector r, double a) {
+		return new RVector(r.x*a, r.y*a);
+	}
+	
+	public void mult(double a) {
+		this.setLocation(x*a, y*a);
+	}
+	
+	public static RVector mult(RVector r, RVector r2) {
+		return new RVector(r.x*r2.x, r.y*r2.y);
+	}
+	
+	public void mult(RVector r) {
+		this.setLocation(x*r.x, y*r.y);
+	}
+	
+	public static RVector add(RVector r, double a) {
+		return new RVector(r.x+a, r.y+a);
+	}
+	
+	public void add(double a) {
+		this.setLocation(x+a, y+a);
+	}
+	
+	public static RVector add(RVector r, RVector r2) {
+		return new RVector(r.x+r2.x, r.y+r2.y);
+	}
+	
+	public void add(RVector r) {
+		this.setLocation(x+r.x, y+r.y);
+	}
+	
+	public static RVector sub(RVector r, double a) {
+		return new RVector(r.x-a, r.y-a);
+	}
+	
+	public void sub(double a) {
+		this.setLocation(x-a, y-a);
+	}
+	
+	public static RVector sub(RVector r, RVector r2) {
+		return new RVector(r.x-r2.x, r.y-r2.y);
+	}
+	
+	public void sub(RVector r) {
+		this.setLocation(x-r.x, y-r.y);
+	}
+	
+	public static RVector div(RVector r, double a) {
+		return new RVector(r.x/a, r.y/a);
+	}
+	
+	public void div(double a) {
+		this.setLocation(x/a, y/a);
+	}
+	
+	public static RVector div(RVector r, RVector r2) {
+		return new RVector(r.x/r2.x, r.y/r2.y);
+	}
+	
+	public void div(RVector r) {
+		this.setLocation(x/r.x, y/r.y);
+	}
+	
+	public void setLocation(double a, double b) {
+		this.x = a;
+		this.y = b;
+	}
+	
+	public void setLocation(RVector r) {
+		setLocation(r.x, r.y);
+	}
+	
 	public void setX(double a) {
 		setLocation(a, y);
 	}
 	
 	public void setY(double a) {
 		setLocation(x, a);
+	}
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
 	}
 	
 	public RVector copy() {

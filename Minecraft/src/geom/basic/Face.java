@@ -105,7 +105,7 @@ public class Face implements Comparable<Face> {
 		}
 		
 		//Do not draw if this image is squished to width/height of 0
-		if(end.x - start.x <= 0.000001 || end.y - start.y <= 0.000001) {
+		if(end.getX() - start.getX() <= 0.000001 || end.getY() - start.getY() <= 0.000001) {
 			return;
 		}
 		
@@ -128,7 +128,7 @@ public class Face implements Comparable<Face> {
 		RVector[] newPoints = new RVector[points.length];
 		for(int i = 0; i < points.length; i++) {
 			//copy over the values from points, but they should be placed in the top right of the Graphics
-			newPoints[i] = new RVector(points[i].x - start.x, points[i].y - start.y);
+			newPoints[i] = new RVector(points[i].getX() - start.getX(), points[i].getY() - start.getY());
 		}
 		
 		int rotations = 0;
@@ -148,7 +148,7 @@ public class Face implements Comparable<Face> {
 		
 		//SHEAR//
 		RVector point2 = new RVector(newPoints[2]);
-		RVector unshearedPoint2 = new RVector(newDimensions.x*0.5 + img2.getWidth()*0.5,newDimensions.y*0.5 + img2.getHeight()*0.5);
+		RVector unshearedPoint2 = new RVector(newDimensions.getX()*0.5 + img2.getWidth()*0.5,newDimensions.getY()*0.5 + img2.getHeight()*0.5);
 		System.out.println(point2 + " " + unshearedPoint2);
 		/*for(RVector r : newPoints) {
 			System.out.println(r);
