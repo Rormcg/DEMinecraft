@@ -133,6 +133,10 @@ public class RVector3D extends RVector {
 			//return 0;
 		}
 	}
+	
+	public RVector rotation() {
+		return new RVector(degrees("X"), degrees("Y"));
+	}
 
 	// returns the slope of line containing the getX() and getY() values of this and another
 	// RVector3D
@@ -146,6 +150,11 @@ public class RVector3D extends RVector {
 	// Returns the magnitude of this vector
 	public double magnitude() {
 		return Math.sqrt(getX() * getX() + getY() * getY() + z * z);
+	}
+	
+	//can return a negative magnitude
+	public double signedMagnitude() {
+		return magnitude() * ((getX() < 0 ^ getY() < 0 ^ getZ() < 0) || (getX() < 0 && getY() < 0 && getZ() < 0) ? -1 : 1);
 	}
 
 	@Override
@@ -232,14 +241,6 @@ public class RVector3D extends RVector {
 
 	public double getZ() {
 		return z;
-	}
-
-	public void setX(double a) {
-		setX(a);
-	}
-
-	public void setY(double a) {
-		setY(a);
 	}
 
 	public void setZ(double a) {

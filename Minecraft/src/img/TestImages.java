@@ -11,6 +11,8 @@ import javax.swing.JComponent;
 //import javax.swing.JOptionPane;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 //import java.awt.Graphics2D;
 //import java.awt.geom.Point2D;
 import java.awt.Color;
@@ -58,7 +60,9 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
    }
    
    public void paintComponent(Graphics g) {
-	   //Graphics2D g2 = (Graphics2D) g;
+	   Graphics2D g2 = (Graphics2D) g;
+	   g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
       
 	   /*RVector points[] = {new RVector(50, 100),
 							new RVector(100, 100),
@@ -109,10 +113,9 @@ public class TestImages extends JComponent implements ActionListener, MouseListe
 			  			new RVector(50, 90)};
 	  int xPos = 50; //smallest x value in points
 	  int yPos = 50; //smallest y value in points*/
-      
 		
       Face f = new Face(Img.GRASS_SIDE, points);
-      f.drawImage(g);
+      f.drawImage((Graphics2D)g);
 	  //g.drawImage(FormatImage.format(Img.GRASS_SIDE.img, points), xPos, yPos, null);
 	   
       g.setColor(Color.RED);

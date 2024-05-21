@@ -4,15 +4,19 @@ import geom.basic.RVector3D;
 
 public class Entity {
 	private RVector3D pos;
-	private RVector3D aim;
 	private RVector3D vel;
 	private RVector3D acc;
+	
+	private RVector3D aim;
+	private RVector3D aVel;
+	
 	
 	public Entity(double x, double y, double z) {
 		pos = new RVector3D(x, y, z);
 		aim = new RVector3D(0, 1, 0);
 		vel = new RVector3D(0, 0, 0);
 		acc = new RVector3D (0, 0, 0);
+		aVel = new RVector3D(0, 0, 0);
 	}
 	
 	public Entity(RVector3D p) {

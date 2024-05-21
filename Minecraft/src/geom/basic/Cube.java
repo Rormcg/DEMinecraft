@@ -1,5 +1,7 @@
 package geom.basic;
 
+import entities.Camera;
+
 public class Cube extends Rect3D {
    
    public Cube(RVector3D[] nodes) {
@@ -13,5 +15,17 @@ public class Cube extends Rect3D {
    
    public Cube(RVector3D pos, double s) {
       this(pos.getX(), pos.getY(), pos.getX(), s);
+   }
+   
+   public Cube(RVector3D[] nodes, Camera c) {
+	   super(nodes, c);
+   }
+   
+   public Cube(double x, double y, double z, double s, Camera c) {
+      super(x, y, z, s, s, s, c);
+   }
+   
+   public Cube(RVector3D pos, double s, Camera c) {
+      this(pos.getX(), pos.getY(), pos.getX(), s, c);
    }
 }
