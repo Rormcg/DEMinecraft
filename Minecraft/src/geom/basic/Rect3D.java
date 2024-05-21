@@ -127,7 +127,13 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 				(getPoints()[0].getY() + getPoints()[7].getY()) / 2,
 				(getPoints()[0].getZ() + getPoints()[7].getZ()) / 2);
 	}
-
+	
+	public boolean inFrontOfCamera() {
+		
+		
+		return true;
+	}
+	
 	@Override
 	public int compareTo(Rect3D o) {
 		
