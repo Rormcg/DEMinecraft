@@ -134,5 +134,6 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 		//return (int)RVector3D.sub(midpoint(), o.midpoint()).signedMagnitude();
 		return (int)(RVector3D.sub(RVector3D.sub(midpoint(), getCamera().getPos()),
 				RVector3D.sub(o.midpoint(), getCamera().getPos())).signedMagnitude());
+		
 	}
 }
