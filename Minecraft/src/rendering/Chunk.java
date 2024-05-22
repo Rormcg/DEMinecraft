@@ -40,7 +40,7 @@ public class Chunk {
 	public void draw(Graphics g) {
 		Arrays.sort(drawableBlocks);
 		for(Block b : drawableBlocks) {
-			b.draw(g);
+			if(b.inFrontOfCamera()) b.draw(g);
 		}
 		
 		/*for(int z = 0; z < blocks.length; z++) {
