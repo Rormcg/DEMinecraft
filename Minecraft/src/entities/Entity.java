@@ -1,6 +1,7 @@
 package entities;
 
 import geom.basic.RVector3D;
+import geom.basic.Rect3D;
 
 public class Entity {
 	private RVector3D pos;
@@ -10,6 +11,8 @@ public class Entity {
 	private RVector3D aim;
 	private RVector3D aVel;
 	
+	private Rect3D collisionBox;
+	
 	
 	public Entity(double x, double y, double z) {
 		pos = new RVector3D(x, y, z);
@@ -17,6 +20,8 @@ public class Entity {
 		vel = new RVector3D(0, 0, 0);
 		acc = new RVector3D (0, 0, 0);
 		aVel = new RVector3D(0, 0, 0);
+		
+		collisionBox = new Rect3D(0, 0, 0, 0, 0, 0);
 	}
 	
 	public Entity(RVector3D p) {

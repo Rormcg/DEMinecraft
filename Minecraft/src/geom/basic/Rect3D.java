@@ -10,7 +10,7 @@ import java.awt.Color;
 
 public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 
-	Rect3D(RVector3D[] nodes) {
+	public Rect3D(RVector3D[] nodes) {
 		if(nodes == null || nodes.length != 8) throw new IllegalArgumentException("Rect3D should have 8 nodes");
 		int[][] lines = {{ 0, 1 }, { 0, 2 }, { 0, 4 }, { 1, 3 }, { 1, 5 }, { 2, 3 }, { 2, 6 }, { 3, 7 }, { 4, 5 },
 				{ 4, 6 }, { 6, 7 }, { 5, 7 } };
@@ -31,7 +31,7 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 
 	// draws from point [x,y,z], which is the backmost, leftmost, topmost (lowest x,
 	// lowest y, lowest z) node of the cube
-	Rect3D(double x, double y, double z, double w, double h, double d) {
+	public Rect3D(double x, double y, double z, double w, double h, double d) {
 		RVector3D[] nodes = new RVector3D[8];
 
 		nodes[0] = new RVector3D(x, y, z);
@@ -60,21 +60,21 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 		super.setFaces(f);
 	}
 
-	Rect3D(RVector3D pos, double w, double h, double d) {
+	public Rect3D(RVector3D pos, double w, double h, double d) {
 		this(pos.getX(), pos.getY(), pos.getZ(), w, h, d);
 	}
 	
-	Rect3D(RVector3D[] nodes, Camera c) {
+	public Rect3D(RVector3D[] nodes, Camera c) {
 		this(nodes);
 		super.setCamera(c);
 	}
 
-	Rect3D(double x, double y, double z, double w, double h, double d, Camera c) {
+	public Rect3D(double x, double y, double z, double w, double h, double d, Camera c) {
 		this(x, y, z, w, h, d);
 		super.setCamera(c);
 	}
 
-	Rect3D(RVector3D pos, double w, double h, double d, Camera c) {
+	public Rect3D(RVector3D pos, double w, double h, double d, Camera c) {
 		this(pos.getX(), pos.getY(), pos.getZ(), w, h, d);
 		super.setCamera(c);
 	}
@@ -129,9 +129,14 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 	}
 	
 	public boolean inFrontOfCamera() {
-		
-		
-		return true;
+		/*for(RVector3D r : getPoints()) {
+			
+		}*/
+		//check the midpoint of this shape is in the 180 degrees in front of the camera
+		return midpoint().degrees("Y") > getCamera().getAim().degrees("Y") - 90 &&
+				midpoint().degrees("Y") < getCamera().getAim().degrees("Y") + 90 &&
+				midpoint().degrees("X") > getCamera().getAim().degrees("X") - 90 &&
+				midpoint().degrees("X") < getCamera().getAim().degrees("X") + 90;
 	}
 	
 	@Override
