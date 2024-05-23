@@ -119,6 +119,20 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 	}
 	
 	/**
+	 * Assumes the two rects are not rotated
+	 * @param other The other rect to check for collisions with
+	 * @return whether the two have collided(intersecting)
+	 */
+	public boolean collidedWith(Rect3D other) {
+		RVector3D pos = getPoint(0);
+		RVector3D opos = other.getPoint(0);
+		
+		return (pos.getX() + width() > opos.getX() && pos.getX() < opos.getX() + other.width()) &&
+				(pos.getY() + height() > opos.getY() && pos.getY() < opos.getY() + other.height()) &&
+				(pos.getZ() + depth() > opos.getZ() && pos.getZ() < opos.getZ() + other.depth());
+	}
+	
+	/**
 	 * Finds and returns the middle of the shape as an RVector3D
 	 * @return the coordinates of the middle point of the shape
 	 */
@@ -126,6 +140,18 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 		return new RVector3D((getPoints()[0].getX() + getPoints()[7].getX()) / 2,
 				(getPoints()[0].getY() + getPoints()[7].getY()) / 2,
 				(getPoints()[0].getZ() + getPoints()[7].getZ()) / 2);
+	}
+	
+	public double width() {
+		return getPoint(2).getX() - getPoint(0).getX();
+	}
+	
+	public double height() {
+		return getPoint(1).getY() - getPoint(0).getY();
+	}
+	
+	public double depth() {
+		return getPoint(7).getZ() - getPoint(0).getY();
 	}
 	
 	public boolean inFrontOfCamera() {

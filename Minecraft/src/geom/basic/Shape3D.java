@@ -30,8 +30,18 @@ public abstract class Shape3D {
    }
    public abstract void update();
    
+   //public abstract boolean collidedWith(Shape3D other);
+   
+   public boolean inFrontOfCamera() {
+	   return true;
+   }
+   
    public RVector3D[] getPoints() {
       return points;
+   }
+   
+   public RVector3D getPoint(int i) {
+	   return points[i];
    }
    
    public void setPoints(RVector3D[] a) {
