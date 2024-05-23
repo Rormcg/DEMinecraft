@@ -12,8 +12,19 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 
 	public Rect3D(RVector3D[] nodes) {
 		if(nodes == null || nodes.length != 8) throw new IllegalArgumentException("Rect3D should have 8 nodes");
-		int[][] lines = {{ 0, 1 }, { 0, 2 }, { 0, 4 }, { 1, 3 }, { 1, 5 }, { 2, 3 }, { 2, 6 }, { 3, 7 }, { 4, 5 },
-				{ 4, 6 }, { 6, 7 }, { 5, 7 } };
+		int[][] lines = {
+				{ 0, 1 },
+				{ 0, 2 },
+				{ 0, 4 },
+				{ 1, 3 },
+				{ 1, 5 },
+				{ 2, 3 },
+				{ 2, 6 },
+				{ 3, 7 },
+				{ 4, 5 },
+				{ 4, 6 },
+				{ 6, 7 },
+				{ 5, 7 }};
 		super.setLines(lines);
 		super.setPoints(nodes);
 
@@ -130,6 +141,72 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 		return (pos.getX() + width() > opos.getX() && pos.getX() < opos.getX() + other.width()) &&
 				(pos.getY() + height() > opos.getY() && pos.getY() < opos.getY() + other.height()) &&
 				(pos.getZ() + depth() > opos.getZ() && pos.getZ() < opos.getZ() + other.depth());
+	}
+	
+	/**
+	 * Returns true if the rects were collided previously
+	 * @param other
+	 * @return
+	 */
+	public boolean decollide(Rect3D other) {
+		if(!collidedWith(other)) return false;
+		
+		RVector3D pos = getPoint(0);
+		RVector3D opos = other.getPoint(0);
+		
+		String col = smallestCollide(other);
+		while(col != "-") {
+			switch(col) {
+			case "x+":
+				break;
+			case "x-":
+				break;
+			case "y":
+				break;
+			case "z":
+				break;
+			}
+			col = smallestCollide(other);
+		}
+		
+		
+		return true;
+	}
+	
+	private String smallestCollide(Rect3D other) {
+		//collision factors
+		double xCol = 0;
+		double yCol = 0;
+		double zCol = 0;
+		
+		if(getPoint(0).getX() >= other.getPoint(0).getX()) {
+			xCol = other.getPoint(0).getX() + other.width() - getPoint(0).getX();
+		} else {
+			xCol = -(getPoint(0).getX() + width() - other.getPoint(0).getX());
+		}
+		
+		if(getPoint(0).getY() >= other.getPoint(0).getY()) {
+			yCol = other.getPoint(0).getY() + other.width() - getPoint(0).getY();
+		} else {
+			yCol = -(getPoint(0).getY() + width() - other.getPoint(0).getY());
+		}
+		
+		if(getPoint(0).getZ() >= other.getPoint(0).getZ()) {
+			zCol = other.getPoint(0).getZ() + other.width() - getPoint(0).getZ();
+		} else {
+			zCol = -(getPoint(0).getZ() + width() - other.getPoint(0).getZ());
+		}
+		
+		if(Math.abs(xCol) > Math.abs(yCol) && yCol != 0) {
+			if(Math.abs(yCol) > Math.abs(zCol) && zCol != 0) {
+				return "z" + (zCol > 0 ? "+" : "-");
+			} else {
+				return "y" + (yCol > 0 ? "+" : "-");
+			}
+		} if(xCol != 0) {
+			return "x" + (xCol > 0 ? "+" : "-");
+		}
+		return "-";
 	}
 	
 	/**
