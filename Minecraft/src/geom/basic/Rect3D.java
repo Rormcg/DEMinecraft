@@ -10,7 +10,7 @@ import java.awt.Color;
 
 public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 	
-	public static final boolean SHOW_LINES = true;
+	public static final boolean SHOW_LINES = false;
 	
 	
 	public Rect3D(RVector3D[] nodes) {

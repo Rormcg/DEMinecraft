@@ -18,7 +18,7 @@ public class Chunk implements Comparable<Chunk>{
 	
 	public final static int WIDTH = 9; //The number of blocks wide (x) a chunk will be
 	public final static int LENGTH = 9; //The number of blocks long (z) a chunk will be
-	public final static int DEPTH = 2; //The number of blocks deep (y) a chunk will be
+	public final static int DEPTH = 8; //The number of blocks deep (y) a chunk will be
 
 	//public final static RVector3D ORIGIN = new RVector3D(0, 250, 0);
 	//public final static RVector3D ORIGIN = new RVector3D(250, 250, 0);
