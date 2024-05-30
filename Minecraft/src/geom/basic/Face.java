@@ -80,7 +80,7 @@ public class Face implements Comparable<Face> {
 	    //System.out.println("H");
 	    //g.fillOval(10, 10, 10, 10);
         
-        g.drawPolygon(xIntPoints(), yIntPoints(), points.length);
+	    if(Rect3D.SHOW_LINES)g.drawPolygon(xIntPoints(), yIntPoints(), points.length);
 		
 	}
 	
@@ -98,7 +98,7 @@ public class Face implements Comparable<Face> {
 	    //System.out.println("H");
 	    //g.fillOval(10, 10, 10, 10);
         
-        g.drawPolygon(xIntPointsRelativeTo(c), yIntPointsRelativeTo(c), points.length);
+        if(Rect3D.SHOW_LINES) g.drawPolygon(xIntPointsRelativeTo(c), yIntPointsRelativeTo(c), points.length);
 	}
 	
 	//Must be a parallelogram

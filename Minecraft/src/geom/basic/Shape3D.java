@@ -94,4 +94,10 @@ public abstract class Shape3D {
          points[i].rotate(x, y, z);
       }
    }
+   
+   public void rotate(double x, double y, double z, RVector3D anchor) {
+	      for(int i = 0; i < points.length; i++) {
+	         points[i].rotate(x, y, z, anchor);
+	      }
+	   }
 }

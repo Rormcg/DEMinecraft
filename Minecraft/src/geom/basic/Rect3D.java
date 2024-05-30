@@ -9,7 +9,10 @@ import img.Img;
 import java.awt.Color;
 
 public class Rect3D extends Shape3D implements Comparable<Rect3D> {
-
+	
+	public static final boolean SHOW_LINES = false;
+	
+	
 	public Rect3D(RVector3D[] nodes) {
 		if(nodes == null || nodes.length != 8) throw new IllegalArgumentException("Rect3D should have 8 nodes");
 		int[][] lines = {
@@ -211,11 +214,19 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 	}
 	
 	@Override
-	public int compareTo(Rect3D o) {
+	public boolean equals(Object o) {
+		if(!(o instanceof Rect3D)) return false;
+		Rect3D r = (Rect3D) o;
 		
+		return Integer.compare((int)getPoint(0).getZ(), (int)r.getPoint(0).getZ()) == 0;
+	}
+	
+	@Override
+	public int compareTo(Rect3D o) {
 		//return (int)RVector3D.sub(midpoint(), o.midpoint()).signedMagnitude();
-		return (int)(RVector3D.sub(RVector3D.sub(midpoint(), getCamera().getPos()),
-				RVector3D.sub(o.midpoint(), getCamera().getPos())).signedMagnitude());
+		return Integer.compare((int)getPoint(0).getZ(), (int)o.getPoint(0).getZ());
+		//return (int)(RVector3D.sub(RVector3D.sub(midpoint(), getCamera().getPos()),
+			//	RVector3D.sub(o.midpoint(), getCamera().getPos())).signedMagnitude());
 		
 	}
 }

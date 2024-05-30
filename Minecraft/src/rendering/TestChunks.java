@@ -35,7 +35,9 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 	private JFrame frame;
 	private Chunk[] chunks;
 	private Camera camera;
-
+	
+	private int testCounter = 0;
+	
 	TestChunks() {
 		screenWidth = 500;
 		screenHeight = 500;
@@ -51,7 +53,7 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 
 		Timer t = new Timer(50, this);
 		t.start();
-
+		
 		frame.setSize(screenWidth + 17, screenHeight + 40);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,8 +62,18 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		camera.rotate(0, 1, 0);
-		repaint();
+		if(testCounter > 100) {
+			camera.rotate(0, 1, 0);
+			
+			for(Chunk c: chunks) {
+				c.rotate(15,  0,  7);
+			}
+			
+			
+			repaint();
+		}
+		testCounter ++;
+		System.out.println(testCounter);
 	}
 
 	public void paintComponent(Graphics g) {
@@ -71,6 +83,8 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 		for(Chunk c: chunks) {
 			c.draw(g);
 		}
+		
+		
    }
 
 	public void mousePressed(MouseEvent e) {

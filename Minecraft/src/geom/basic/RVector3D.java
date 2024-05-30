@@ -32,7 +32,17 @@ public class RVector3D extends RVector {
 	public void rotate(RVector3D r) {
 		rotate(Math.toRadians(r.getX()), Math.toRadians(r.getY()), Math.toRadians(r.z));
 	}
-
+	
+	public void rotate(RVector3D r, RVector3D anchor) {
+		this.sub(anchor);
+		this.rotate(r);
+		this.add(anchor);
+	}
+	
+	public void rotate(double x, double y, double z, RVector3D anchor) {
+		rotate(new RVector3D(x, y, z), anchor);
+	}
+	
 	// Rotates this vector by the specified radians in each direction (rx will
 	// rotate around x-axis)
 	public void rotateRadians(double rx, double ry, double rz) {
