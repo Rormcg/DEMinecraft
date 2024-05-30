@@ -9,12 +9,14 @@ public abstract class Shape3D {
    private int[][] lines;
    private Face[] faces;
    private Camera camera;
+   private RVector3D vel;
    
    Shape3D() {
       points = null;
       lines = null;
       faces = null;
       camera = null;
+      vel = null;
    }
    
    Shape3D(RVector3D[] nodes) {
@@ -22,6 +24,7 @@ public abstract class Shape3D {
       lines = null;
       faces = null;
       camera = null;
+      vel = null;
    }
    
    public abstract void draw(Graphics g);
@@ -56,6 +59,10 @@ public abstract class Shape3D {
 	   camera = c;
    }
    
+   public void setVel(RVector3D r) {
+	   vel = r;
+   }
+   
    public Camera getCamera() {
 	   return camera;
    }
@@ -66,6 +73,10 @@ public abstract class Shape3D {
    
    public Face[] getFaces() {
 	   return faces;
+   }
+   
+   public RVector3D getVel() {
+	   return vel;
    }
    
    public void setFaces(Face[] f) {
