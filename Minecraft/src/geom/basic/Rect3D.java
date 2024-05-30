@@ -144,69 +144,37 @@ public class Rect3D extends Shape3D implements Comparable<Rect3D> {
 	}
 	
 	/**
-	 * Returns true if the rects were collided previously
+	 * Moves this Rect3D out of the interior of other so that the two are touching edges
 	 * @param other
-	 * @return
+	 * @return true if the rects were collided previously
 	 */
 	public boolean decollide(Rect3D other) {
 		if(!collidedWith(other)) return false;
 		
-		RVector3D pos = getPoint(0);
-		RVector3D opos = other.getPoint(0);
+		RVector3D mid = midpoint();
+		RVector3D oMid = other.midpoint();
 		
-		String col = smallestCollide(other);
-		while(col != "-") {
-			switch(col) {
-			case "x+":
-				break;
-			case "x-":
-				break;
-			case "y":
-				break;
-			case "z":
-				break;
-			}
-			col = smallestCollide(other);
-		}
-		
-		
-		return true;
-	}
-	
-	private String smallestCollide(Rect3D other) {
 		//collision factors
-		double xCol = 0;
-		double yCol = 0;
-		double zCol = 0;
+		double xCol = 1;
+		double yCol = 1;
+		double zCol = 1;
 		
-		if(getPoint(0).getX() >= other.getPoint(0).getX()) {
-			xCol = other.getPoint(0).getX() + other.width() - getPoint(0).getX();
-		} else {
-			xCol = -(getPoint(0).getX() + width() - other.getPoint(0).getX());
-		}
-		
-		if(getPoint(0).getY() >= other.getPoint(0).getY()) {
-			yCol = other.getPoint(0).getY() + other.width() - getPoint(0).getY();
-		} else {
-			yCol = -(getPoint(0).getY() + width() - other.getPoint(0).getY());
-		}
-		
-		if(getPoint(0).getZ() >= other.getPoint(0).getZ()) {
-			zCol = other.getPoint(0).getZ() + other.width() - getPoint(0).getZ();
-		} else {
-			zCol = -(getPoint(0).getZ() + width() - other.getPoint(0).getZ());
-		}
-		
-		if(Math.abs(xCol) > Math.abs(yCol) && yCol != 0) {
-			if(Math.abs(yCol) > Math.abs(zCol) && zCol != 0) {
-				return "z" + (zCol > 0 ? "+" : "-");
-			} else {
-				return "y" + (yCol > 0 ? "+" : "-");
+		while(xCol != 0 && yCol != 0 && zCol != 0) {
+			xCol = (mid.getX() > oMid.getX() ? 1 : -1) * (width() + other.width() - Math.abs(mid.getX() - oMid.getX()));
+			yCol = (mid.getY() > oMid.getY() ? 1 : -1) * (height() + other.height() - Math.abs(mid.getY() - oMid.getY()));
+			zCol = (mid.getZ() > oMid.getZ() ? 1 : -1) * (depth() + other.depth() - Math.abs(mid.getZ() - oMid.getZ()));
+			
+			if(Math.abs(xCol) <= Math.abs(yCol) && xCol != 0) {
+				if(zCol < xCol && zCol != 0) {
+					moveBy(new RVector3D(0, 0, zCol));
+				} else {
+					moveBy(new RVector3D(xCol, 0, 0));
+				}
+			} else if(yCol != 0) {
+				moveBy(new RVector3D(0, yCol, 0));
 			}
-		} if(xCol != 0) {
-			return "x" + (xCol > 0 ? "+" : "-");
 		}
-		return "-";
+		return true;
 	}
 	
 	/**

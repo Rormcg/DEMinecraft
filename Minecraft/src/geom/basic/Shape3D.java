@@ -83,6 +83,12 @@ public abstract class Shape3D {
 	   faces = f;
    }
    
+   public void moveBy(RVector3D r) {
+	   for(RVector3D p: points) {
+		   p.add(r);
+	   }
+   }
+   
    public void rotate(double x, double y, double z) {
       for(int i = 0; i < points.length; i++) {
          points[i].rotate(x, y, z);
