@@ -30,7 +30,7 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final boolean singleChunk = false;
+	public static final boolean singleChunk = false;
 	
 	
 	// FIELDS
@@ -45,11 +45,17 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 	
 	
 	TestChunks() {
-		screenWidth = 500;
-		screenHeight = 500;
+		screenWidth = 600;
+		screenHeight = 600;
 		
-		chunks = new Chunk[]{new Chunk(-1, 0),
-							new Chunk(0, -1),
+		chunks = singleChunk ? 
+				new Chunk[]{//new Chunk(-1, 0),
+							//new Chunk(0, -1),
+							//new Chunk(-1, -1),
+							new Chunk(0, 0)}
+				:
+					new Chunk[]{//new Chunk(-1, 0),
+							//new Chunk(0, -1),
 							new Chunk(-1, -1),
 							new Chunk(0, 0)};
 		
@@ -62,7 +68,7 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 		content.setBackground(Color.WHITE);
 		content.add(this);
 
-		Timer t = new Timer(50, this);
+		Timer t = new Timer(10, this);
 		t.start();
 		
 		frame.setSize(screenWidth + 17, screenHeight + 40);
@@ -79,7 +85,7 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 			
 			if(singleChunk) {
 				for(Chunk c: chunks) {
-					c.rotate(20,  0,  20);
+					c.rotate(30,  0,  30);
 				}
 			} else {
 				chunkMatrix.rotate(20, 0, 20);

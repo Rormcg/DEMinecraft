@@ -16,12 +16,13 @@ public class Chunk implements Comparable<Chunk>{
 	private Block[][][] blocks;
 	private Block[] drawableBlocks;
 	
-	public final static int WIDTH = 10; //The number of blocks wide (x) a chunk will be
-	public final static int LENGTH = 10; //The number of blocks long (z) a chunk will be
-	public final static int DEPTH = 2; //The number of blocks deep (y) a chunk will be
+	public final static int WIDTH = 9; //The number of blocks wide (x) a chunk will be
+	public final static int LENGTH = 9; //The number of blocks long (z) a chunk will be
+	public final static int DEPTH = 6; //The number of blocks deep (y) a chunk will be
 
 	//public final static RVector3D ORIGIN = new RVector3D(0, 250, 0);
-	public final static RVector3D ORIGIN = new RVector3D(250, 250, 0);
+	//public final static RVector3D ORIGIN = new RVector3D(250, 250, 0);
+	public final static RVector3D ORIGIN = TestChunks.singleChunk ? new RVector3D(180, 250, 0) : new RVector3D(300, 300, 0);
 	
 	private RVector3D midpoint;
 	
@@ -36,8 +37,13 @@ public class Chunk implements Comparable<Chunk>{
 				for(int y = 0; y < DEPTH; y++) {
 					//blocks[z][x][y] = new Block(zc*LENGTH + z, xc*WIDTH + x, y*DEPTH);
 					//blocks[z][x][y] = new Grass(zc*LENGTH + z, xc*WIDTH + x, y*DEPTH);
-					if(y == 0)blocks[z][x][y] = new Grass((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
-					else blocks[z][x][y] = new Dirt((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
+					if(y < 1) {
+						blocks[z][x][y] = new Grass((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
+					} else if(y < 3) {
+						blocks[z][x][y] = new Dirt((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
+					} else {
+						blocks[z][x][y] = new Stone((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
+					}
 					//System.out.println(y*DEPTH*Block.SIZE);
 					drawableBlocks[WIDTH * z * DEPTH + DEPTH * x + y] = blocks[z][x][y];
 				}
