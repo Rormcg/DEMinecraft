@@ -11,16 +11,17 @@ import geom.block.*;
  * @author Rory McGuire
  * Helps to separate blocks into manageable 16x16 columns
  */
-public class Chunk {
+public class Chunk implements Comparable<Chunk>{
 	
 	private Block[][][] blocks;
 	private Block[] drawableBlocks;
 	
 	public final static int WIDTH = 10; //The number of blocks wide (x) a chunk will be
 	public final static int LENGTH = 10; //The number of blocks long (z) a chunk will be
-	public final static int DEPTH = 1; //The number of blocks deep (y) a chunk will be
-	
-	public final static int GROUND_LEVEL = 200;
+	public final static int DEPTH = 2; //The number of blocks deep (y) a chunk will be
+
+	//public final static RVector3D ORIGIN = new RVector3D(0, 250, 0);
+	public final static RVector3D ORIGIN = new RVector3D(250, 250, 0);
 	
 	private RVector3D midpoint;
 	
@@ -35,7 +36,8 @@ public class Chunk {
 				for(int y = 0; y < DEPTH; y++) {
 					//blocks[z][x][y] = new Block(zc*LENGTH + z, xc*WIDTH + x, y*DEPTH);
 					//blocks[z][x][y] = new Grass(zc*LENGTH + z, xc*WIDTH + x, y*DEPTH);
-					blocks[z][x][y] = new Grass((xc*WIDTH + x) * Block.SIZE, y*DEPTH*Block.SIZE + GROUND_LEVEL, (zc*LENGTH + z) * Block.SIZE);
+					if(y == 0)blocks[z][x][y] = new Grass((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
+					else blocks[z][x][y] = new Dirt((xc*WIDTH + x) * Block.SIZE + ORIGIN.getX(), y*Block.SIZE + ORIGIN.getY(), (zc*LENGTH + z) * Block.SIZE);
 					//System.out.println(y*DEPTH*Block.SIZE);
 					drawableBlocks[WIDTH * z * DEPTH + DEPTH * x + y] = blocks[z][x][y];
 				}
@@ -66,6 +68,17 @@ public class Chunk {
 		}
 	}
 	
+	public void rotate(double xr, double yr, double zr, RVector3D r) {
+		for(int z = 0; z < LENGTH; z++) {
+			for(int x = 0; x < WIDTH; x++) {
+				for(int y = 0; y < DEPTH; y++) {
+					blocks[z][x][y].rotate(xr, yr, zr, r);
+					//drawableBlocks[WIDTH * z * DEPTH + DEPTH * x + y];
+				}
+			}
+		}
+	}
+	
 	public void draw(Graphics g) {
 		Arrays.sort(drawableBlocks);
 		for(Block b : drawableBlocks) {
@@ -81,11 +94,17 @@ public class Chunk {
 			}
 		}*/
 	}
+
+	@Override
+	public int compareTo(Chunk o) {
+		return (int)Integer.compare((int)midpoint().getZ(), (int)o.midpoint().getZ());
+	}
 	
-	/*public RVector3D midpoint() {
-		return new RVector3D(blocks[0][0][0].getPoint(0).getX() + 0.5 * WIDTH * Block.SIZE,
-				blocks[0][0][0].getPoint(0).getY() + 0.5 * DEPTH * Block.SIZE,
-				blocks[0][0][0].getPoint(0).getZ() + 0.5 * LENGTH * Block.SIZE);
-	}*/
+	//for use with compareTo only (not currently accurate enough for rotation)
+	private RVector3D midpoint() {
+		return new RVector3D(blocks[(int)(LENGTH * 0.5)][(int)(WIDTH * 0.5)][(int)(DEPTH * 0.5)].getPoint(0).getX() + 0.5 * WIDTH * Block.SIZE,
+				blocks[(int)(LENGTH * 0.5)][(int)(WIDTH * 0.5)][(int)(DEPTH * 0.5)].getPoint(0).getY() + 0.5 * DEPTH * Block.SIZE,
+				blocks[(int)(LENGTH * 0.5)][(int)(WIDTH * 0.5)][(int)(DEPTH * 0.5)].getPoint(0).getZ() + 0.5 * LENGTH * Block.SIZE);
+	}
 
 }

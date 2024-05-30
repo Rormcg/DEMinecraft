@@ -7,7 +7,7 @@ import img.Img;
 
 public class Block extends Cube {
 	
-	public static double SIZE = 100;
+	public static double SIZE = 30;
 	public Img[] images;
 	
 	public Block(RVector3D[] nodes) {

@@ -30,19 +30,30 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private static final boolean singleChunk = false;
+	
+	
 	// FIELDS
 	private int screenWidth, screenHeight;
 	private JFrame frame;
 	private Chunk[] chunks;
+	private ChunkMatrix chunkMatrix;
 	private Camera camera;
 	
 	private int testCounter = 0;
+	
+	
 	
 	TestChunks() {
 		screenWidth = 500;
 		screenHeight = 500;
 		
-		chunks = new Chunk[]{new Chunk(0, 0)};
+		chunks = new Chunk[]{new Chunk(-1, 0),
+							new Chunk(0, -1),
+							new Chunk(-1, -1),
+							new Chunk(0, 0)};
+		
+		chunkMatrix = new ChunkMatrix(chunks);
 		camera = new Camera(0, -100, 0);
 		camera.setAim(new RVector3D(0, 1, 5));
 		
@@ -62,27 +73,30 @@ public class TestChunks extends JComponent implements ActionListener, MouseListe
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(testCounter > 100) {
+		if(testCounter > 0) {
 			camera.rotate(0, 1, 0);
 			
-			for(Chunk c: chunks) {
-				c.rotate(15,  0,  7);
+			
+			if(singleChunk) {
+				for(Chunk c: chunks) {
+					c.rotate(20,  0,  20);
+				}
+			} else {
+				chunkMatrix.rotate(20, 0, 20);
 			}
 			
 			
 			repaint();
 		}
 		testCounter ++;
-		System.out.println(testCounter);
+		//System.out.println(testCounter);
 	}
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
-		for(Chunk c: chunks) {
-			c.draw(g);
-		}
+		chunkMatrix.draw(g);
 		
 		
    }
