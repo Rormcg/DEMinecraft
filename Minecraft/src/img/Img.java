@@ -10,7 +10,8 @@ public enum Img {
 	DIRT_SIDE("dirtSide.jpeg"),
 	GRASS_SIDE("grassSide.jpg"),
 	GRASS_TOP("grassTop.png"),
-	STONE("stone.jpeg");
+	STONE("stone.jpeg"),
+	DEEPSLATE("deepslate.jpg");
 	
 	public BufferedImage img;
 	
